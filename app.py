@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, jsonify, request
 
-driver = webdriver.Chrome('https://github.com/binna/toy-poject/blob/main/chromedriver')
+driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(3)
 
 app = Flask(__name__)
