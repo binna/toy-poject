@@ -396,3 +396,6 @@ Thumbs.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/flask
+
+# 크롬 드라이버
+chromedriver.exe
