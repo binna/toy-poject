@@ -21,7 +21,29 @@ def crawling_wavve():
         titles = soup.select('#g-contents > div.list-view-detail > div')
         for title in titles:
             name = title.select_one('a > div.sub-title > div > div > span').text
-            print('wavve ' + name)
+            img = title.select_one('a > div.thumb-image > img')
+            img2 = img.attrs['data-src']
+            driver.get(
+                'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + name.replace(
+                    "[스페셜]", ""))
+            req = driver.page_source
+            soup = BeautifulSoup(req, 'html.parser')
+            divs = soup.select('#main_pack > div')
+            description = False
+            try:
+                for div in divs:
+                    div = div.select('div.cm_content_wrap > div > div > div')
+                    if div:
+                        for target in div:
+                            temp = target.select('div')
+                            for targetDiv in temp:
+                                targetDescription = targetDiv.select_one('div.detail_info > div > span.desc')
+                                if targetDescription:
+                                    description = targetDescription.text
+            except:
+                pass
+
+            print('wavve ' + name, img2, description)
 
 
 def crawling_watcha():
@@ -34,7 +56,32 @@ def crawling_watcha():
         name2 = title.select_one('li > div > ul')
         for name in name2:
             title = name.select_one('li > div > div.css-1g3awd').text
-            print('watcha ' + title)
+            driver.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + title)
+            req = driver.page_source
+            soup = BeautifulSoup(req, 'html.parser')
+            divs = soup.select('#main_pack > div')
+            description = False
+            try:
+                for div in divs:
+                    div = div.select('div.cm_content_wrap > div > div > div')
+                    if div:
+                        for target in div:
+                            temp = target.select('div')
+                            for targetDiv in temp:
+                                targetDescription = targetDiv.select_one('div.detail_info > div > span.desc')
+                                if targetDescription:
+                                    description = targetDescription.text
+            except:
+                pass
+            try:
+                img = name.select_one(
+                    'li > div > div.css-cssveg > div.css-omgs1s > div.css-fcehsw-StyledSelf.e1q5rx9q0 > span').attrs[
+                    'style'].replace("background-image: url(\"", "").replace("\");", "")
+            except:
+                print('watcha ', title)
+                continue
+
+            print('watcha ', title, img, description)
 
 
 @app.route('/')
