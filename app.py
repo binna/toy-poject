@@ -43,7 +43,12 @@ def crawling_wavve():
             except:
                 pass
 
-            print('wavve ' + name, img2, description)
+            doc = {
+                'title': name,
+                'image': img2,
+                'desc': description
+            }
+            print(doc)
 
 
 def crawling_watcha():
@@ -81,7 +86,12 @@ def crawling_watcha():
                 print('watcha ', title)
                 continue
 
-            print('watcha ', title, img, description)
+            doc = {
+                'title': title,
+                'image': img,
+                'desc': description
+            }
+            print(doc)
 
 
 @app.route('/')
