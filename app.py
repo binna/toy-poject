@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 
 def crawling_wavve():
+    doc = {'wavve': []}
     a = [1, 2]
     for b in a:
         url = 'https://www.wavve.com/list/EN397?api=apis.wavve.com%252Fcf%252Fthemes%252F397%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN397%2526uiparent%253DGN13-EN397%2526uirank%253D1%2526broadcastid%253DGN13_EN397_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN397&came=BandViewGnbCode&page=' + str(
@@ -42,13 +43,13 @@ def crawling_wavve():
                                     description = targetDescription.text
             except:
                 pass
-
-            doc = {
+            doc['wavve'].append({
                 'title': name,
                 'image': img2,
                 'desc': description
-            }
-            print(doc)
+            })
+    # print(doc)
+    return jsonify(doc)
 
 
 def crawling_watcha():
@@ -57,6 +58,8 @@ def crawling_watcha():
     req = driver.page_source
     soup = BeautifulSoup(req, 'html.parser')
     titles = soup.select('#root > div.css-urf8br-Self.e19xg79h0 > main > div > section > ul > li')
+    doc = {'watcha': []}
+
     for title in titles:
         name2 = title.select_one('li > div > ul')
         for name in name2:
@@ -83,15 +86,19 @@ def crawling_watcha():
                     'li > div > div.css-cssveg > div.css-omgs1s > div.css-fcehsw-StyledSelf.e1q5rx9q0 > span').attrs[
                     'style'].replace("background-image: url(\"", "").replace("\");", "")
             except:
-                print('watcha ', title)
+                doc['watcha'].append({
+                    'title': title,
+                    'image': img,
+                })
                 continue
 
-            doc = {
+            doc['watcha'].append({
                 'title': title,
                 'image': img,
                 'desc': description
-            }
-            print(doc)
+            })
+    # print(doc)
+    return jsonify(doc)
 
 
 @app.route('/')
@@ -102,6 +109,6 @@ def home():
 if __name__ == '__main__':
     # app.run('0.0.0.0', port=5000, debug=True)
     crawling_wavve()
-    crawling_watcha()
+    # crawling_watcha()
 
     driver.close()
