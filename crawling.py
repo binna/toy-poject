@@ -51,9 +51,9 @@ def wavve_movie():
 
 
 def wavve_drama():
-    a = [1, 2]
-    for b in a:
-        url = 'https://www.wavve.com/list/EN397?api=apis.wavve.com%252Fcf%252Fthemes%252F397%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN397%2526uiparent%253DGN13-EN397%2526uirank%253D1%2526broadcastid%253DGN13_EN397_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN397&came=BandViewGnbCode&page=' + str(b)
+    page = [1, 2]
+    for targetPage in page:
+        url = 'https://www.wavve.com/list/EN397?api=apis.wavve.com%252Fcf%252Fthemes%252F397%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN397%2526uiparent%253DGN13-EN397%2526uirank%253D1%2526broadcastid%253DGN13_EN397_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN397&came=BandViewGnbCode&page=' + str(targetPage)
         driver.get(url)
         req = driver.page_source
         soup = BeautifulSoup(req, 'html.parser')
@@ -73,8 +73,8 @@ def wavve_drama():
 
 
 def watcha():
-    url2 = 'https://watcha.com/staffmades/3260'
-    driver.get(url2)
+    url = 'https://watcha.com/staffmades/3260'
+    driver.get(url)
     req = driver.page_source
     soup = BeautifulSoup(req, 'html.parser')
     titles = soup.select('#root > div.css-urf8br-Self.e19xg79h0 > main > div > section > ul > li')
