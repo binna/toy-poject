@@ -64,7 +64,7 @@ def wavve_drama():
             img = targetImg.attrs['data-src']
             description = search_naver_description(name)
             doc = {
-                'name': 'wavve-drama',
+                'name': 'drama',
                 'title': name,
                 'image': img,
                 'desc': description
@@ -104,7 +104,13 @@ def watcha():
                     'li > div > div.css-cssveg > div.css-omgs1s > div.css-fcehsw-StyledSelf.e1q5rx9q0 > span').attrs[
                     'style'].replace("background-image: url(\"", "").replace("\");", "")
             except:
-                print('watcha ', title)
+                doc = {
+                    'name': 'watcha',
+                    'title': title,
+                    'image': img,
+                    'desc': description
+                }
+                db.watcha.insert_one(doc)
                 continue
             doc = {
                 'name': 'watcha',
