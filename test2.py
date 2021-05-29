@@ -68,5 +68,3 @@ check_watcha()
 
 driver.close()
 
-
-
