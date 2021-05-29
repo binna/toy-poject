@@ -5,8 +5,8 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.toyProject
 
-driver = webdriver.Chrome('/Users/jinwoojung/Downloads/chromedriver')
-#driver = webdriver.Chrome('./chromedriver')
+# driver = webdriver.Chrome('/Users/jinwoojung/Downloads/chromedriver')
+driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(3)
 
 
