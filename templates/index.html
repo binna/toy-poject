@@ -19,12 +19,9 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!-- 구글폰트, 나중에 원할때 하자 -->
+    <!-- TODO 구글폰트, 나중에 원할때 하자 -->
 
-
-    <!-- TODO -->
-
-    <link href="index.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 
     <title>9조.</title>
 
@@ -32,7 +29,19 @@
     <style type="text/css"></style>
 
     <!-- JavaScript -->
-    <script></script>
+    <script>
+        function dataReset() {
+            $.ajax({
+                type: "GET",
+                url: '/api/data-reset',
+                data: {},
+                success: function (response) {
+                    alert(response['msg'])
+                }
+            })
+        }
+    </script>
+
 
     <link href="11.html" rel="html sheet"/>
 
@@ -320,6 +329,7 @@
 
 </div>
 
+<button onclick="dataReset()">데이터 리셋</button>
 
 <!--!&#45;&#45;ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅇㅇㅇㅇㅇㅇㅡㅡㅡ 모달창 ㅡㅡㅡㅡㅇㅇㅇㅇㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ&ndash;&gt;-->
 <div class="modal">
