@@ -8,49 +8,35 @@ client = MongoClient('localhost', 27017)
 db = client.toyProject
 
 
-def get_random(num, start, end):
-    cnt = 0
-    a_dict = {}
-    while True:
-        if cnt == num:
-            return list(a_dict.keys())
-
-        num_created = random.randint(start, end)
-        if num_created in a_dict:
-            continue
-        else:
-            a_dict[num_created] = True
-            cnt = cnt + 1
-
-
 @app.route('/')
 def home():
     return render_template('index.html')
 
 
-@app.route('/api/data-reset', methods=['GET'])
+@app.route('/api/data/data-reset', methods=['GET'])
 def data_reset():
     return jsonify({'msg': collect_reset()})
 
 
-@app.route('/api/data', methods=['GET'])
+@app.route('/api/data/all', methods=['GET'])
 def show_data():
     data = list(db.client.toyProject.data.find({}, {'_id': False}))
     random.shuffle(data)
     return jsonify({'data': data})
 
 
-@app.route('/api/drama', methods=['GET'])
+@app.route('/api/data/drama', methods=['GET'])
 def show_drama():
     drama = list(db.client.toyProject.data.find({'name': 'drama'}, {'_id': False}))
     random.shuffle(drama)
-    return jsonify({'drama': drama})
+    return jsonify({'data': drama})
 
-@app.route('/api/entertainment', methods=['GET'])
+
+@app.route('/api/data/entertainment', methods=['GET'])
 def show_entertainment():
     entertainment = list(db.client.toyProject.data.find({'name': 'entertainment'}, {'_id': False}))
     random.shuffle(entertainment)
-    return jsonify({'entertainment': entertainment})
+    return jsonify({'data': entertainment})
 
 
 if __name__ == '__main__':

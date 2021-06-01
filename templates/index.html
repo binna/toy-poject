@@ -48,7 +48,7 @@
         function dataReset() {
             $.ajax({
                 type: "GET",
-                url: '/api/data-reset',
+                url: '/api/data/data-reset',
                 data: {},
                 success: function (response) {
                     alert(response['msg']);
@@ -62,7 +62,7 @@
             $(".second").html("");
             $.ajax({
                 type: "GET",
-                url: "/api/data",
+                url: "/api/data/all",
                 data: {},
                 success: function (response) {
                     let allContents = response['data']
@@ -90,10 +90,10 @@
             $(".second").html("");
             $.ajax({
                 type: "GET",
-                url: "/api/drama",
+                url: "/api/data/drama",
                 data: {},
                 success: function (response) {
-                    let allDrama = response['drama']
+                    let allDrama = response['data']
                     for (let i = 0; i < allDrama.length; i++) {
                         let name = allDrama[i]['name']
                         let title = allDrama[i]['title']
@@ -119,10 +119,10 @@
             $(".second").html("");
             $.ajax({
                 type: "GET",
-                url: "/api/entertainment",
+                url: "/api/data/entertainment",
                 data: {},
                 success: function (response) {
-                    let allEntertainment = response['entertainment']
+                    let allEntertainment = response['data']
                     for (let i = 0; i < allEntertainment.length; i++) {
                         let name = allEntertainment[i]['name']
                         let title = allEntertainment[i]['title']
