@@ -9,7 +9,8 @@ db = client.toyProject
 
 def search_naver_description(name, driver):
     driver.get(
-        'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + name.replace("[스페셜]", ""))
+        'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + name.replace("[스페셜]",
+                                                                                                              ""))
     req = driver.page_source
     soup = BeautifulSoup(req, 'html.parser')
     divs = soup.select('#main_pack > div')
@@ -44,20 +45,22 @@ def collect_watcha(url, name, driver):
                     'style'].replace("background-image: url(\"", "").replace("\");", "")
             except:
                 doc = {
+                    'type': 'watcha',
                     'name': name,
                     'title': title,
                     'image': img,
                     'desc': description
                 }
-                db.watcha.insert_one(doc)
+                db.data.insert_one(doc)
                 continue
             doc = {
+                'type': 'watcha',
                 'name': name,
                 'title': title,
                 'image': img,
                 'desc': description
             }
-            db.watcha.insert_one(doc)
+            db.data.insert_one(doc)
 
 
 def collect_wavve(url, name, driver):
@@ -72,34 +75,39 @@ def collect_wavve(url, name, driver):
         driver.get('https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + title)
         description = search_naver_description(title, driver)
         doc = {
+            'type': 'wavve',
             'name': name,
             'title': title,
             'image': img,
             'desc': description
         }
-        db.wavve.insert_one(doc)
+        db.data.insert_one(doc)
 
 
 def collect_reset():
-    db.wavve.drop()
-    db.watcha.drop()
+    db.data.drop()
 
     # driver = webdriver.Chrome('/Users/jinwoojung/Downloads/chromedriver')
     driver = webdriver.Chrome('./chromedriver')
 
     try:
-        # TODO 예능추가
         collect_wavve(
             'https://www.wavve.com/list/EN397?api=apis.wavve.com%252Fcf%252Fthemes%252F397%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN397%2526uiparent%253DGN13-EN397%2526uirank%253D1%2526broadcastid%253DGN13_EN397_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN397&came=BandViewGnbCode&page=1',
             'drama', driver)
         collect_wavve(
             'https://www.wavve.com/list/EN397?api=apis.wavve.com%252Fcf%252Fthemes%252F397%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN397%2526uiparent%253DGN13-EN397%2526uirank%253D1%2526broadcastid%253DGN13_EN397_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN397&came=BandViewGnbCode&page=2',
             'drama', driver)
-        # TODO 예능추가
+        collect_wavve(
+            'https://www.wavve.com/list/EN398?api=apis.wavve.com%252Fcf%252Fthemes%252F398%253Fcontenttype%253Dx%2526WeekDay%253Dall%2526uitype%253DEN398%2526uiparent%253DGN13-EN398%2526uirank%253D2%2526broadcastid%253DGN13_EN398_pc_none_none%2526offset%253D0%2526limit%253D20%2526uicode%253DEN398&came=BandViewGnbCode',
+            'entertainment', driver)
         collect_watcha('https://watcha.com/explore?genre=353', 'drama', driver)  # 드라마
+        collect_watcha('https://watcha.com/explore?genre=282983', 'entertainment', driver)
+
     except NoSuchWindowException:
+        driver.close()
         return "[관리자 연락 요망] 데이터 리셋 실패"
     except:
+        driver.close()
         return "[관리자 연락 요망] 데이터 리셋 실패"
-
+    driver.close()
     return "데이터 리셋 성공"
