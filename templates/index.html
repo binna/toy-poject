@@ -30,22 +30,21 @@
 
     <!-- JavaScript -->
     <script>
-         $(document).ready(function () {
-            // $(".first").html("");
-            // $(".second").html("");
-            // getEight()
-             $.ajax({
-                 type: "GET",
-                 url: "/api/data",
-                 success: function (response) {
-                     if (response['data'].length <= 0) {
-                         alert('데이터 세팅을 해주세요!')
-                         $('#DataResetBtn').focus()
-                     }
-                     console.log(response['data'])
-                 }
-             })
+        $(document).ready(function () {
+            showAll()
+            $.ajax({
+                type: "GET",
+                url: "/api/data",
+                success: function (response) {
+                    if (response['data'].length <= 0) {
+                        alert('데이터 세팅을 해주세요!')
+                        $('#DataResetBtn').focus()
+                    }
+                    console.log(response['data'])
+                }
+            })
         })
+
         function dataReset() {
             $.ajax({
                 type: "GET",
@@ -57,75 +56,21 @@
                 }
             })
         }
-        // function watchaFour() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: '/api/get_watcha',
-        //         data: {},
-        //         success: function (response) {
-        //             let watchaContents = response['random_watcha']
-        //             for (let i = 0; i < watchaContents.length; i++) {
-        //                 let name = watchaContents[i]['name']
-        //                 let title = watchaContents[i]['title']
-        //                 let image = watchaContents[i]['image']
-        //                 let desc = watchaContents[i]['desc']
-        //                 let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-        //                                         <img style="width:20vw;" src="${image}">
-        //                                         <h4 style="text-align: center">${title}</h4>
-        //                                         <div class="Contents">${desc}</div>
-        //                                         <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-        //                                                 class="btn btn-outline-primary">자세히 보기
-        //                                         </button>
-        //                                       </div>`
-        //                 $('.first').append(temp_html)
-        //             }
-        //
-        //         }
-        //     })
-        // }
-        // function wavveFour() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: '/api/get_wavve',
-        //         data: {},
-        //         success: function (response) {
-        //             let wavveContents = response['random_wavve']
-        //             for (let i = 0; i < wavveContents.length; i++) {
-        //                 let name = wavveContents[i]['name']
-        //                 let title = wavveContents[i]['title']
-        //                 let image = wavveContents[i]['image']
-        //                 let desc = wavveContents[i]['desc']
-        //                 let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-        //                                         <img style="width:20vw;" src="${image}">
-        //                                         <h4 style="text-align: center">${title}</h4>
-        //                                         <div class="Contents">${desc}</div>
-        //                                         <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-        //                                                 class="btn btn-outline-primary">자세히 보기
-        //                                         </button>
-        //                                       </div>`
-        //                 $('.second').append(temp_html)
-        //             }
-        //         }
-        //     })
-        // }
-        function getEight() {
+
+        function showAll() {
             $(".first").html("");
             $(".second").html("");
-            watchaFour()
-            wavveFour()
-        }
-        function wavveDrama() {
             $.ajax({
                 type: "GET",
-                url: '/api/wavve_drama',
+                url: "/api/data",
                 data: {},
                 success: function (response) {
-                    let wavveDrama = response['wavve_drama']
-                    for (let i = 0; i < wavveDrama.length; i++) {
-                        let name = wavveDrama[i]['name']
-                        let title = wavveDrama[i]['title']
-                        let image = wavveDrama[i]['image']
-                        let desc = wavveDrama[i]['desc']
+                    let allContents = response['data']
+                    for (let i = 0; i < allContents.length; i++) {
+                        let name = allContents[i]['name']
+                        let title = allContents[i]['title']
+                        let image = allContents[i]['image']
+                        let desc = allContents[i]['desc']
                         let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
                                                 <img style="width:20vw;" src="${image}">
                                                 <h4 style="text-align: center">${title}</h4>
@@ -139,49 +84,21 @@
                 }
             })
         }
-        function watchaDrama() {
-            $.ajax({
-                type: "GET",
-                url: '/api/watcha_drama',
-                data: {},
-                success: function (response) {
-                    let watchaDrama = response['watcha_drama']
-                    for (let i = 0; i < watchaDrama.length; i++) {
-                        let name = watchaDrama[i]['name']
-                        let title = watchaDrama[i]['title']
-                        let image = watchaDrama[i]['image']
-                        let desc = watchaDrama[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.second').append(temp_html)
-                    }
-                }
-            })
-        }
-        function getDrama() {
+
+        function showDrama() {
             $(".first").html("");
             $(".second").html("");
-            wavveDrama()
-            watchaDrama()
-        }
-        function wavveEntertainment() {
             $.ajax({
                 type: "GET",
-                url: '/api/wavve_entertainment',
+                url: "/api/drama",
                 data: {},
                 success: function (response) {
-                    let wavveEntertainment = response['wavve_entertainment']
-                    for (let i = 0; i < wavveEntertainment.length; i++) {
-                        let name = wavveEntertainment[i]['name']
-                        let title = wavveEntertainment[i]['title']
-                        let image = wavveEntertainment[i]['image']
-                        let desc = wavveEntertainment[i]['desc']
+                    let allDrama = response['drama']
+                    for (let i = 0; i < allDrama.length; i++) {
+                        let name = allDrama[i]['name']
+                        let title = allDrama[i]['title']
+                        let image = allDrama[i]['image']
+                        let desc = allDrama[i]['desc']
                         let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
                                                 <img style="width:20vw;" src="${image}">
                                                 <h4 style="text-align: center">${title}</h4>
@@ -192,21 +109,25 @@
                                               </div>`
                         $('.first').append(temp_html)
                     }
+
                 }
             })
         }
-        function watchaEntertainment() {
+
+        function showEntertainment() {
+            $(".first").html("");
+            $(".second").html("");
             $.ajax({
                 type: "GET",
-                url: '/api/watcha_entertainment',
+                url: "/api/entertainment",
                 data: {},
                 success: function (response) {
-                    let watchaEntertainment = response['watcha_entertainment']
-                    for (let i = 0; i < watchaEntertainment.length; i++) {
-                        let name = watchaEntertainment[i]['name']
-                        let title = watchaEntertainment[i]['title']
-                        let image = watchaEntertainment[i]['image']
-                        let desc = watchaEntertainment[i]['desc']
+                    let allEntertainment = response['entertainment']
+                    for (let i = 0; i < allEntertainment.length; i++) {
+                        let name = allEntertainment[i]['name']
+                        let title = allEntertainment[i]['title']
+                        let image = allEntertainment[i]['image']
+                        let desc = allEntertainment[i]['desc']
                         let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
                                                 <img style="width:20vw;" src="${image}">
                                                 <h4 style="text-align: center">${title}</h4>
@@ -215,17 +136,14 @@
                                                         class="btn btn-outline-primary">자세히 보기
                                                 </button>
                                               </div>`
-                        $('.second').append(temp_html)
+                        $('.first').append(temp_html)
                     }
+
                 }
             })
         }
-        function getEntertainment() {
-            $(".first").html("");
-            $(".second").html("");
-            wavveEntertainment()
-            watchaEntertainment()
-        }
+
+
     </script>
 
 
@@ -245,7 +163,7 @@
         <div class="wrapper__left">
 
 
-            <button onclick="getEntertainment()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+            <button onclick="showEntertainment()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
                     class="btn btn-outline-primary button movie">
 
 
@@ -253,7 +171,7 @@
 
             </button>
 
-            <button onclick="getDrama()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+            <button onclick="showDrama()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
                     class="btn btn-outline-primary button drama">
 
 
@@ -271,7 +189,7 @@
                     <strong>추 천 작</strong>
                 </div>
 
-                <button onclick="getEight()" type="button" style="width: 28%; margin-left: 4px; margin-top: 5px"
+                <button onclick="showAll()" type="button" style="width: 28%; margin-left: 4px; margin-top: 5px"
                         class="btn btn-outline-primary button refresh">
                     다른 작품 추천 받기
                 </button>
