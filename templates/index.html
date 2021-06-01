@@ -30,33 +30,75 @@
 
     <!-- JavaScript -->
     <script>
-         $(document).ready(function () {
-            $(".first").html("");
-            $(".second").html("");
-            getEight()
+        $(document).ready(function () {
+            showAll()
+            $.ajax({
+                type: "GET",
+                url: "/api/data",
+                success: function (response) {
+                    if (response['data'].length <= 0) {
+                        alert('데이터 세팅을 해주세요!')
+                        $('#DataResetBtn').focus()
+                    }
+                    console.log(response['data'])
+                }
+            })
         })
+
         function dataReset() {
             $.ajax({
                 type: "GET",
                 url: '/api/data-reset',
                 data: {},
                 success: function (response) {
-                    alert(response['msg'])
+                    alert(response['msg']);
+                    location.reload();
                 }
             })
         }
-        function watchaFour() {
+
+        function showAll() {
+            $(".first").html("");
+            $(".second").html("");
             $.ajax({
                 type: "GET",
-                url: '/api/get_watcha',
+                url: "/api/data",
                 data: {},
                 success: function (response) {
-                    let watchaContents = response['random_watcha']
-                    for (let i = 0; i < watchaContents.length; i++) {
-                        let name = watchaContents[i]['name']
-                        let title = watchaContents[i]['title']
-                        let image = watchaContents[i]['image']
-                        let desc = watchaContents[i]['desc']
+                    let allContents = response['data']
+                    for (let i = 0; i < allContents.length; i++) {
+                        let name = allContents[i]['name']
+                        let title = allContents[i]['title']
+                        let image = allContents[i]['image']
+                        let desc = allContents[i]['desc']
+                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
+                                                <img style="width:20vw;" src="${image}">
+                                                <h4 style="text-align: center">${title}</h4>
+                                                <div class="Contents">${desc}</div>
+                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+                                                        class="btn btn-outline-primary">자세히 보기
+                                                </button>
+                                              </div>`
+                        $('.first').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function showDrama() {
+            $(".first").html("");
+            $(".second").html("");
+            $.ajax({
+                type: "GET",
+                url: "/api/drama",
+                data: {},
+                success: function (response) {
+                    let allDrama = response['drama']
+                    for (let i = 0; i < allDrama.length; i++) {
+                        let name = allDrama[i]['name']
+                        let title = allDrama[i]['title']
+                        let image = allDrama[i]['image']
+                        let desc = allDrama[i]['desc']
                         let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
                                                 <img style="width:20vw;" src="${image}">
                                                 <h4 style="text-align: center">${title}</h4>
@@ -71,49 +113,21 @@
                 }
             })
         }
-        function wavveFour() {
-            $.ajax({
-                type: "GET",
-                url: '/api/get_wavve',
-                data: {},
-                success: function (response) {
-                    let wavveContents = response['random_wavve']
-                    for (let i = 0; i < wavveContents.length; i++) {
-                        let name = wavveContents[i]['name']
-                        let title = wavveContents[i]['title']
-                        let image = wavveContents[i]['image']
-                        let desc = wavveContents[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.second').append(temp_html)
-                    }
-                }
-            })
-        }
-        function getEight() {
+
+        function showEntertainment() {
             $(".first").html("");
             $(".second").html("");
-            watchaFour()
-            wavveFour()
-        }
-        function wavveDrama() {
             $.ajax({
                 type: "GET",
-                url: '/api/wavve_drama',
+                url: "/api/entertainment",
                 data: {},
                 success: function (response) {
-                    let wavveDrama = response['wavve_drama']
-                    for (let i = 0; i < wavveDrama.length; i++) {
-                        let name = wavveDrama[i]['name']
-                        let title = wavveDrama[i]['title']
-                        let image = wavveDrama[i]['image']
-                        let desc = wavveDrama[i]['desc']
+                    let allEntertainment = response['entertainment']
+                    for (let i = 0; i < allEntertainment.length; i++) {
+                        let name = allEntertainment[i]['name']
+                        let title = allEntertainment[i]['title']
+                        let image = allEntertainment[i]['image']
+                        let desc = allEntertainment[i]['desc']
                         let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
                                                 <img style="width:20vw;" src="${image}">
                                                 <h4 style="text-align: center">${title}</h4>
@@ -124,96 +138,12 @@
                                               </div>`
                         $('.first').append(temp_html)
                     }
+
                 }
             })
         }
-        function watchaDrama() {
-            $.ajax({
-                type: "GET",
-                url: '/api/watcha_drama',
-                data: {},
-                success: function (response) {
-                    let watchaDrama = response['watcha_drama']
-                    for (let i = 0; i < watchaDrama.length; i++) {
-                        let name = watchaDrama[i]['name']
-                        let title = watchaDrama[i]['title']
-                        let image = watchaDrama[i]['image']
-                        let desc = watchaDrama[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.second').append(temp_html)
-                    }
-                }
-            })
-        }
-        function getDrama() {
-            $(".first").html("");
-            $(".second").html("");
-            wavveDrama()
-            watchaDrama()
-        }
-        function wavveEntertainment() {
-            $.ajax({
-                type: "GET",
-                url: '/api/wavve_entertainment',
-                data: {},
-                success: function (response) {
-                    let wavveEntertainment = response['wavve_entertainment']
-                    for (let i = 0; i < wavveEntertainment.length; i++) {
-                        let name = wavveEntertainment[i]['name']
-                        let title = wavveEntertainment[i]['title']
-                        let image = wavveEntertainment[i]['image']
-                        let desc = wavveEntertainment[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.first').append(temp_html)
-                    }
-                }
-            })
-        }
-        function watchaEntertainment() {
-            $.ajax({
-                type: "GET",
-                url: '/api/watcha_entertainment',
-                data: {},
-                success: function (response) {
-                    let watchaEntertainment = response['watcha_entertainment']
-                    for (let i = 0; i < watchaEntertainment.length; i++) {
-                        let name = watchaEntertainment[i]['name']
-                        let title = watchaEntertainment[i]['title']
-                        let image = watchaEntertainment[i]['image']
-                        let desc = watchaEntertainment[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.second').append(temp_html)
-                    }
-                }
-            })
-        }
-        function getEntertainment() {
-            $(".first").html("");
-            $(".second").html("");
-            wavveEntertainment()
-            watchaEntertainment()
-        }
+
+
     </script>
 
 
@@ -233,7 +163,7 @@
         <div class="wrapper__left">
 
 
-            <button onclick="getEntertainment()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+            <button onclick="showEntertainment()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
                     class="btn btn-outline-primary button movie">
 
 
@@ -241,7 +171,7 @@
 
             </button>
 
-            <button onclick="getDrama()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+            <button onclick="showDrama()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
                     class="btn btn-outline-primary button drama">
 
 
@@ -259,7 +189,7 @@
                     <strong>추 천 작</strong>
                 </div>
 
-                <button onclick="getEight()" type="button" style="width: 28%; margin-left: 4px; margin-top: 5px"
+                <button onclick="showAll()" type="button" style="width: 28%; margin-left: 4px; margin-top: 5px"
                         class="btn btn-outline-primary button refresh">
                     다른 작품 추천 받기
                 </button>
@@ -503,49 +433,49 @@
 
 </div>
 
-<button onclick="dataReset()">데이터 리셋</button>
+<button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
 
 <!--!&#45;&#45;ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅇㅇㅇㅇㅇㅇㅡㅡㅡ 모달창 ㅡㅡㅡㅡㅇㅇㅇㅇㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ&ndash;&gt;-->
-<div class="modal">
-    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-         class="modal__life">
+<!--<div class="modal">-->
+<!--    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+<!--         class="modal__life">-->
 
 
-    </img>
-    <div class="modal__right">
-        <div class="modal__right__index">제목
+<!--    </img>-->
+<!--    <div class="modal__right">-->
+<!--        <div class="modal__right__index">제목-->
 
-        </div>
-        <div class="modal__right__summary">
-            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리
+<!--        </div>-->
+<!--        <div class="modal__right__summary">-->
+<!--            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리-->
 
-        </div>
-        <div class="modal__right__cast"
-        "> 출연진
+<!--        </div>-->
+<!--        <div class="modal__right__cast"-->
+<!--        "> 출연진-->
 
-    </div>
+<!--    </div>-->
 
-    <div class="modal__right__cc">
+<!--    <div class="modal__right__cc">-->
 
-        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                class="btn btn-outline-primary choice">
+<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+<!--                class="btn btn-outline-primary choice">-->
 
-            <strong>선택</strong>
+<!--            <strong>선택</strong>-->
 
-        </button>
+<!--        </button>-->
 
-        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                class="btn btn-outline-primary cancel">
+<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+<!--                class="btn btn-outline-primary cancel">-->
 
-            <strong>돌아가기</strong>
-        </button>
+<!--            <strong>돌아가기</strong>-->
+<!--        </button>-->
 
-    </div>
+<!--    </div>-->
 
-</div>
+<!--</div>-->
 
 
-</div>
+<!--</div>-->
 
 <!--test 지울거-->
 <!--<button type="button" class="btn btn-primary"-->
