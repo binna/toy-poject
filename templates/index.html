@@ -31,9 +31,19 @@
     <!-- JavaScript -->
     <script>
          $(document).ready(function () {
-            $(".first").html("");
-            $(".second").html("");
-            getEight()
+            // $(".first").html("");
+            // $(".second").html("");
+            // getEight()
+             $.ajax({
+                 type: "GET",
+                 url: "/api/data",
+                 success: function (response) {
+                     if (response['data'].length <= 0) {
+                         alert('데이터 세팅을 해주세요!')
+                         $('#DataResetBtn').focus()
+                     }
+                 }
+             })
         })
         function dataReset() {
             $.ajax({
@@ -41,61 +51,62 @@
                 url: '/api/data-reset',
                 data: {},
                 success: function (response) {
-                    alert(response['msg'])
+                    alert(response['msg']);
+                    location.reload();
                 }
             })
         }
-        function watchaFour() {
-            $.ajax({
-                type: "GET",
-                url: '/api/get_watcha',
-                data: {},
-                success: function (response) {
-                    let watchaContents = response['random_watcha']
-                    for (let i = 0; i < watchaContents.length; i++) {
-                        let name = watchaContents[i]['name']
-                        let title = watchaContents[i]['title']
-                        let image = watchaContents[i]['image']
-                        let desc = watchaContents[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.first').append(temp_html)
-                    }
-
-                }
-            })
-        }
-        function wavveFour() {
-            $.ajax({
-                type: "GET",
-                url: '/api/get_wavve',
-                data: {},
-                success: function (response) {
-                    let wavveContents = response['random_wavve']
-                    for (let i = 0; i < wavveContents.length; i++) {
-                        let name = wavveContents[i]['name']
-                        let title = wavveContents[i]['title']
-                        let image = wavveContents[i]['image']
-                        let desc = wavveContents[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.second').append(temp_html)
-                    }
-                }
-            })
-        }
+        // function watchaFour() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: '/api/get_watcha',
+        //         data: {},
+        //         success: function (response) {
+        //             let watchaContents = response['random_watcha']
+        //             for (let i = 0; i < watchaContents.length; i++) {
+        //                 let name = watchaContents[i]['name']
+        //                 let title = watchaContents[i]['title']
+        //                 let image = watchaContents[i]['image']
+        //                 let desc = watchaContents[i]['desc']
+        //                 let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
+        //                                         <img style="width:20vw;" src="${image}">
+        //                                         <h4 style="text-align: center">${title}</h4>
+        //                                         <div class="Contents">${desc}</div>
+        //                                         <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+        //                                                 class="btn btn-outline-primary">자세히 보기
+        //                                         </button>
+        //                                       </div>`
+        //                 $('.first').append(temp_html)
+        //             }
+        //
+        //         }
+        //     })
+        // }
+        // function wavveFour() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: '/api/get_wavve',
+        //         data: {},
+        //         success: function (response) {
+        //             let wavveContents = response['random_wavve']
+        //             for (let i = 0; i < wavveContents.length; i++) {
+        //                 let name = wavveContents[i]['name']
+        //                 let title = wavveContents[i]['title']
+        //                 let image = wavveContents[i]['image']
+        //                 let desc = wavveContents[i]['desc']
+        //                 let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
+        //                                         <img style="width:20vw;" src="${image}">
+        //                                         <h4 style="text-align: center">${title}</h4>
+        //                                         <div class="Contents">${desc}</div>
+        //                                         <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
+        //                                                 class="btn btn-outline-primary">자세히 보기
+        //                                         </button>
+        //                                       </div>`
+        //                 $('.second').append(temp_html)
+        //             }
+        //         }
+        //     })
+        // }
         function getEight() {
             $(".first").html("");
             $(".second").html("");
@@ -503,49 +514,49 @@
 
 </div>
 
-<button onclick="dataReset()">데이터 리셋</button>
+<button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
 
 <!--!&#45;&#45;ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅇㅇㅇㅇㅇㅇㅡㅡㅡ 모달창 ㅡㅡㅡㅡㅇㅇㅇㅇㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ&ndash;&gt;-->
-<div class="modal">
-    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-         class="modal__life">
+<!--<div class="modal">-->
+<!--    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+<!--         class="modal__life">-->
 
 
-    </img>
-    <div class="modal__right">
-        <div class="modal__right__index">제목
+<!--    </img>-->
+<!--    <div class="modal__right">-->
+<!--        <div class="modal__right__index">제목-->
 
-        </div>
-        <div class="modal__right__summary">
-            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리
+<!--        </div>-->
+<!--        <div class="modal__right__summary">-->
+<!--            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리-->
 
-        </div>
-        <div class="modal__right__cast"
-        "> 출연진
+<!--        </div>-->
+<!--        <div class="modal__right__cast"-->
+<!--        "> 출연진-->
 
-    </div>
+<!--    </div>-->
 
-    <div class="modal__right__cc">
+<!--    <div class="modal__right__cc">-->
 
-        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                class="btn btn-outline-primary choice">
+<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+<!--                class="btn btn-outline-primary choice">-->
 
-            <strong>선택</strong>
+<!--            <strong>선택</strong>-->
 
-        </button>
+<!--        </button>-->
 
-        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                class="btn btn-outline-primary cancel">
+<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+<!--                class="btn btn-outline-primary cancel">-->
 
-            <strong>돌아가기</strong>
-        </button>
+<!--            <strong>돌아가기</strong>-->
+<!--        </button>-->
 
-    </div>
+<!--    </div>-->
 
-</div>
+<!--</div>-->
 
 
-</div>
+<!--</div>-->
 
 <!--test 지울거-->
 <!--<button type="button" class="btn btn-primary"-->
