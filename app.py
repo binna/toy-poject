@@ -38,6 +38,5 @@ def show_entertainment():
     random.shuffle(entertainment)
     return jsonify({'data': entertainment})
 
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5002, debug=True)

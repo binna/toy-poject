@@ -1,36 +1,110 @@
 <!Doctype html>
 <html lang="ko">
-
+<!-- 템플릿 적용하고 나서 각 스크립트 함수 $('.first) 부분 주석 해제!!!-->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!--    템플릿 적용 CSS / JS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
+            rel="stylesheet"
+    />
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="static/css/fontawesome.css"/>
+    <link rel="stylesheet" href="static/css/templatemo-style.css?after" type="text/css"/>
+    <link rel="stylesheet" href="static/css/owl.css"/>
+    <link rel="stylesheet" href="static/css/lightbox.css"/>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+<!--                부트스트랩 3.4.1 불러오면 CSS가 날뜀;-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <!-- TODO 구글폰트, 나중에 원할때 하자 -->
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-
+    <!--    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flex-slider.css') }}">
     <title>9조.</title>
 
     <!-- style -->
-    <style type="text/css"></style>
+    <style type="text/css">
+        #card_img {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: auto;
+        }
+
+        #card_img_base {
+            width: 250px;
+            height: 300px;
+        }
+
+        .card {
+            width: 200px;
+            height: 480px;
+            float: left;
+            min-width: 230px;
+            /*margin-bottom: 10px!important;*/
+            margin: 0px 10px 10px 0px !important;
+        }
+
+        .card-title {
+            color: black;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0px !important;
+            padding: 0px 50px 0px 0px !important;
+        }
+
+        .card-text {
+            width: 240px;
+            height: 110px;
+            color: black;
+            text-align: center;
+            position: relative;
+            /*word-break:break-all!important;*/
+            white-space: pre-wrap !important;
+            padding: 10px 20px 0px 25px !important;
+        }
+
+        .card-body {
+            width: 300px;
+            height: 200px;
+            /*position: fixed;*/
+            overflow: hidden;
+            padding: 0px;
+            font-size: 15px;
+        }
+
+        #card_p {
+            overflow: auto;
+        }
+
+    </style>
 
     <!-- JavaScript -->
     <script>
         $(document).ready(function () {
+            $('#card-box').html("")
             showAll()
             $.ajax({
                 type: "GET",
@@ -71,23 +145,56 @@
                         let title = allContents[i]['title']
                         let image = allContents[i]['image']
                         let desc = allContents[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.first').append(temp_html)
+                        let temp_html = `<div id="card ${name}" class="card">
+                                            <div id="card_img_base">
+                                                <img id="card_img" class="card-img-top" src=${image} alt="Card image cap">
+                                            </div>
+                                            <div class="card-body">
+                                              <h5 class="card-title">${title}</h5>
+                                              <p id="card_p" class="card-text">${desc}</p>
+                                              <button type="button" class="btn btn-primary"
+                                                      data-toggle="modal" data-target="#exampleModal${name}">
+                                                        자세히 보기
+                                              </button>
+
+                                              <div class="modal fade" id="exampleModal${name}" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel"
+                                                                    style="color: black">
+                                                                    ${title}
+                                                                </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body" style="color: black">
+                                                                <img src=${image}>
+                                                                <hr/>
+                                                                <div>
+                                                                    ${desc}
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                    닫기
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $('#card-box').append(temp_html)
                     }
                 }
             })
         }
 
         function showDrama() {
-            $(".first").html("");
-            $(".second").html("");
+            // $(".first").html("");
+            // $(".second").html("");
             $.ajax({
                 type: "GET",
                 url: "/api/data/drama",
@@ -99,15 +206,48 @@
                         let title = allDrama[i]['title']
                         let image = allDrama[i]['image']
                         let desc = allDrama[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.first').append(temp_html)
+                        let temp_html = `<div id="card ${name}" class="card">
+                                            <div id="card_img_base">
+                                                <img id="card_img" class="card-img-top" src=${image} alt="Card image cap">
+                                            </div>
+                                            <div class="card-body">
+                                              <h5 class="card-title">${title}</h5>
+                                              <p id="card_p" class="card-text">${desc}</p>
+                                              <button type="button" class="btn btn-primary"
+                                                      data-toggle="modal" data-target="#exampleModal${name}">
+                                                        자세히 보기
+                                              </button>
+
+                                              <div class="modal fade" id="exampleModal${name}" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel"
+                                                                    style="color: black">
+                                                                    ${title}
+                                                                </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body" style="color: black">
+                                                                <img src=${image}>
+                                                                <hr/>
+                                                                <div>
+                                                                    ${desc}
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                    닫기
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $('#card-box').append(temp_html)
                     }
 
                 }
@@ -128,15 +268,48 @@
                         let title = allEntertainment[i]['title']
                         let image = allEntertainment[i]['image']
                         let desc = allEntertainment[i]['desc']
-                        let temp_html = `<div style="width:20vw;" class="cards" id="${name}">
-                                                <img style="width:20vw;" src="${image}">
-                                                <h4 style="text-align: center">${title}</h4>
-                                                <div class="Contents">${desc}</div>
-                                                <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                                        class="btn btn-outline-primary">자세히 보기
-                                                </button>
-                                              </div>`
-                        $('.first').append(temp_html)
+                        let temp_html = `<div id="card ${name}" class="card">
+                                            <div id="card_img_base">
+                                                <img id="card_img" class="card-img-top" src=${image} alt="Card image cap">
+                                            </div>
+                                            <div class="card-body">
+                                              <h5 class="card-title">${title}</h5>
+                                              <p id="card_p" class="card-text">${desc}</p>
+                                              <button type="button" class="btn btn-primary"
+                                                      data-toggle="modal" data-target="#exampleModal${name}">
+                                                        자세히 보기
+                                              </button>
+
+                                              <div class="modal fade" id="exampleModal${name}" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel"
+                                                                    style="color: black">
+                                                                    ${title}
+                                                                </h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body" style="color: black">
+                                                                <img src=${image}>
+                                                                <hr/>
+                                                                <div>
+                                                                    ${desc}
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                    닫기
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $('#card-box').append(temp_html)
                     }
 
                 }
@@ -152,364 +325,373 @@
 </head>
 
 <body>
-<div class="team9">항해99 9조대</div>
-<div class="back">
-
-
-    <div class="wrapper">
-
-        <!--        좌측입니다.-->
-
-        <div class="wrapper__left">
-
-
-            <button onclick="showEntertainment()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                    class="btn btn-outline-primary button movie">
-
-
-                예능
-
-            </button>
-
-            <button onclick="showDrama()" type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                    class="btn btn-outline-primary button drama">
-
-
-                드라마
-            </button>
-
-
-        </div>
-
-        <!--        센터입니다-->
-
-        <div class="wrapper__center">
-            <div class="wrapper__center__top">
-                <div class="recommendation">
-                    <strong>추 천 작</strong>
-                </div>
-
-                <button onclick="showAll()" type="button" style="width: 28%; margin-left: 4px; margin-top: 5px"
-                        class="btn btn-outline-primary button refresh">
-                    다른 작품 추천 받기
-                </button>
-
-            </div>
-
-
-            <div class="wrapper__center__bottom">
-
-                <div class="first">
-
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex"> 제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 dddddㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-
-                </div>
-                <div class="second">
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-                    <div class="cards">
-                        <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                             class="img">
-                        <h4 class="intex">제 목</h4>
-
-                        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                                class="btn btn-outline-primary button">자세히 보기
-                        </button>
-
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-        <!--        우측입니다.-->
-
-        <div class="wrapper__right">
-            <div class="cookie">
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-                <div class="cookie__incookie">
-
-                    <div class="intext">
-                        ㅇㅇㅇㅇㅇㅇㅇ
-                    </div>
-
-
-                    <button type="button" class="btn btn-danger icon">
-
-                        <strong>X</strong>
-                    </button>
-
-
-                </div>
-
-
-            </div>
-
-
-            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"
-                    class="btn btn-outline-primary button check"> 확 인
-            </button>
-
-        </div>
-
-
+    <!--    <div class="back">-->
+    <!--        <div class="wrapper">-->
+    <!--            &lt;!&ndash;        센터입니다&ndash;&gt;-->
+    <!--            <div class="wrapper__center">-->
+    <!--                <div class="wrapper__center__top">-->
+    <!--                    <div class="recommendation">-->
+    <!--                        <strong>추 천 작</strong>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="wrapper__center__bottom">-->
+    <!--                    <div class="first">-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex"> 제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 dddddㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    <div class="second">-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                        <div class="cards">-->
+    <!--                            <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--                                 class="img">-->
+    <!--                            <h4 class="intex">제 목</h4>-->
+    <!--                            <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                                    class="btn btn-outline-primary button">자세히 보기-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div style="float: right">
+        <button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
     </div>
 
-</div>
+    <div id="page-wraper">
+        <!-- Sidebar Menu -->
+        <div class="responsive-nav">
+            <i class="fa fa-bars" id="menu-toggle"></i>
+            <div id="menu" class="menu">
+                <i class="fa fa-times" id="menu-close"></i>
+                <div class="container">
+                    <div class="image">
+                        <a href="#"><img style="border: solid white" src="static/images/main_img.jpeg" alt=""/></a>
+                    </div>
+                    <div class="author-content">
+                        <hr style="background-color: white; border: 1px solid white;">
+                        <h4 style="color: white">OTT서비스 추천 페이지</h4>
+                        <span style="color: black; font-size: 20px">n개만 골라보세요!</span>
+                        <hr style="background-color: white; border: 1px solid white;">
+                    </div>
+                    <nav class="main-nav" role="navigation">
+                        <ul class="main-menu">
+                            <li><a href="#section1">항해99</a></li>
+                            <li><a href="#section2">OTT 서비스 추천</a></li>
+                        </ul>
+                    </nav>
+                    <!--            <div class="social-network">-->
+                    <!--              <ul class="soial-icons">-->
+                    <!--                <li>-->
+                    <!--                  <a href="https://fb.com/templatemo"-->
+                    <!--                    ><i class="fa fa-facebook"></i-->
+                    <!--                  ></a>-->
+                    <!--                </li>-->
+                    <!--                <li>-->
+                    <!--                  <a href="#"><i class="fa fa-twitter"></i></a>-->
+                    <!--                </li>-->
+                    <!--                <li>-->
+                    <!--                  <a href="#"><i class="fa fa-linkedin"></i></a>-->
+                    <!--                </li>-->
+                    <!--                <li>-->
+                    <!--                  <a href="#"><i class="fa fa-dribbble"></i></a>-->
+                    <!--                </li>-->
+                    <!--                <li>-->
+                    <!--                  <a href="#"><i class="fa fa-rss"></i></a>-->
+                    <!--                </li>-->
+                    <!--              </ul>-->
+                    <!--            </div>-->
+                    <div class="copyright-text">
+                        <p>Copyright 2019 Reflux Design</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
+        <section class="section about-me" data-section="section1">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>지금 출항합니다.</h2>
+                    <div class="line-dec"></div>
+                    <span style="line-height: 30px"
+                    >항해99는 코딩에 대한 사전지식이 없는 성인을 대상으로, 99일 간의 팀 프로젝트 기반의 자기주도적 성장을 통해
+                  현업에 바로 투입 가능한 주니어 개발자를 양성하는 온라인 부트캠프입니다.
+                  99일간의 항해로, 훌륭한 개발자로 성장해나갈 수 있는 기반을 닦으세요. 때론 높은 파도가 치겠지만, 거친 바다를 헤쳐나간 경험이 소중한 자산으로 남을 것입니다.
+                </span
+                >
+                </div>
+                <div class="left-image-post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="left-image">
+                                <img src="static/images/hanghae_ship.jpeg" alt=""/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="right-text">
+                                <h2 style="font-weight: bold">토이프로젝트 - OTT서비스 추천</h2>
+                                <p style="line-height: 30px; font-size: 15px;">
+                                    무작위 컨텐츠 중 n개를 고르면 당신에게 알맞는 OTT서비스를 추천!!<br/>
+                                    아래의 포스터가 무슨 컨텐츠인지 모르겠다면 '자세히 보기'를 Click!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<!--!&#45;&#45;ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅇㅇㅇㅇㅇㅇㅡㅡㅡ 모달창 ㅡㅡㅡㅡㅇㅇㅇㅇㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ&ndash;&gt;-->
-<!--<div class="modal">-->
-<!--    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
-<!--         class="modal__life">-->
+        <section class="section my-work" data-section="section2">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>골라보세요!</h2>
+                    <div class="line-dec"></div>
+                    <span style="line-height: 30px"
+                    >n개를 골라보세요!<br/>
+                  무슨 컨텐츠인지 잘 모르겠다면 "자세히 보기"를 Click!
+                </span>
+                </div>
+                <div style="width: 1000px" class="row">
+                    <div class="isotope-wrapper">
+                        <form class="isotope-toolbar">
+                            <label
+                            ><input
+                                    type="radio"
+                                    data-type="*"
+                                    checked=""
+                                    name="isotope-filter"
+                            />
+                                <span>all</span></label
+                            >
+                            <label
+                            ><input
+                                    type="radio"
+                                    data-type="people"
+                                    name="isotope-filter"
+                            />
+                                <span>people</span></label
+                            >
+                            <label
+                            ><input
+                                    type="radio"
+                                    data-type="nature"
+                                    name="isotope-filter"
+                            />
+                                <span>nature</span></label
+                            >
+                            <label
+                            ><input
+                                    type="radio"
+                                    data-type="animals"
+                                    name="isotope-filter"
+                            />
+                                <span>animals</span></label
+                            >
+                        </form>
+                    </div>
+                    <div id="card-box" class="card-deck">
+                        <div id="card" class="card">
+                            <div id="card_img_base">
+                                <img id="card_img" class="card-img-top"
+                                     src="data:image/jpeg;base64,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"
+                                     alt="Card image cap">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p id="card_p" class="card-text">This is a longer card with supporting text below as a
+                                    natural lead-in to additional content. This content is a little bit longer.</p>
+                                <button>모달</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top"
+                                 src="data:image/jpeg;base64,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"
+                                 alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p id="card_p" class="card-text">This card has supporting text below as a natural lead-in to
+                                    additional content.</p>
+                                <button>모달</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="card-img-top"
+                                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUVFRgVFhYZGBgZHBwYGhoaHBwhGh0cHhgcHRocGBohIS8lIR4rHxwaJjgmKzAxNTU1GiQ7QDszPy40NTEBDAwMEA8QHxISHjQrJSw9NDY0NDY3NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP/AABEIALkBEQMBIgACEQEDEQH/xAAbAAACAwEBAQAAAAAAAAAAAAADBQIEBgEAB//EAEIQAAIBAwIEAwYDBQYFBAMAAAECEQADIRIxBAVBUSJhcQYTMoGRoUJSsRRywdHwFSNiktLxJDOiwuEWNEOyB1OC/8QAGgEAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/EACkRAAICAQQCAgEDBQAAAAAAAAABAhEhAxIxQSJRBBNxMmHBFFKBkbH/2gAMAwEAAhEDEQA/APoguLdTUpwpgz/GgcXy8EAgVn+D49rYIWIbef19aY8s5yV8LCV6eXpXz2r8FxluielFyjw/8FDiuC0fEDB69qpNwrDbI6EVreOvBl2DKRv2pSOGESI6+tXo/JaTUjaKU1bVCIrXUSrF6zpMVywvirvUsWiHHNMElkavFtU7nCAfCZqxdg5FRR5FXGTeSJRisFEpUHWrl5MzQtFbxZg0VGSc0W3anA3ommK9bMZrZMhle9ZKmDiqzJTLib2qMZFVXWtoN9mUkVtFcNujxXdNapmTRX0V3TRStc01aZm0CivRRdNc01Vk0C01wiila4VpoTAkVAijlaiVpiAkVwiixUStUSwRFcopFRimIGa5RNNRK0CIV6pFa9FAEa6DXoroFAHZr1eivUAbI2ZwO01FLIkeuR1+VG1MMihkme1fOVL2e/aHNqzpJUbETkdPMUNlUGIAB6jImlnvW3kz/XWvXLpI/Ufxrgfw5brvk1jNFjieEEn7HoR3payQasrfaNM46eVR92T0NdGnFwVSY20yT+IbfSqoWrNo9KI1mqU9uAcN2SkvnXglFdKjFdEJpqzCUKZB7M7VXZCOlMbYE0R+Fkb1rGdcmbjYnVa4y1cfhiDUbiYxW8ZoxlEpi3Ne0RVpRXGWtlIzcSmUr2mjMtQK1omZNAorkVMivEVaIYIioxRiKgRVIlkIFRZamRUCKaEDIrhWiaa8VpksCRUdNGiuFaokCRXCKKRXNNAA9Nc00XTXCtMAemuRRNNcigDkV6pRXqANsy9KCbdXGWhMlfNRmmrR78oPsrFKNZ4Ykx3qRSoqxU0521URRpO2WBy/MEQauJwqBYkk0McaGicHarSKsaq8bWnrp0zRvF/8Ft7g8E9aDZ/Kac8X4rcqIzEdxSvhjIzv966IOT023kvTnYN7FVTaMxTcAGq3E2iDWmlrtOmVJKRUazGagHad6vMkiaA9oiurT1d3JjOFcAonegFM1YYHpQnaBJgDuTArsjKjlkiHuxUDaFAu80sqYNxfkdR+izVPief2F2LMewEH/rIrZSS7M2n6LjpUDbpSfaiz4pBGneWGDOzRMVXb2tSJ0rEx8TE4E/l+9aLWiuzNwkx2UrmikL+1K+GFA1bSG694OI3M0Jfanf4cAn4Hgx+U6s7/ADp/fEn6pGhKVE26z6+1ilS0Agdlb/VtRG9qEGkwsNtlp3Azgx86tfIh7IejIdlKgUpUPaFNWjSuqYgOCdp/LRV57abbVjcjSQPWGq1rwfZL0pei8VrhWgJx9tvxgesj7kCrQ2npWkZxlwzNxa5QIrUSKNUCKuyaBRXdNT016KdioHFcIokVwiiwoHFcipkVE0xHIr1dr1AG6dSK4M0e2CRIzUCPlXxCnt4Z9TaeGDZKEyVa0/71FreK6tP5Ck6ZjKC6KbLTLgXEQYmqTpXrLFW1RPrWutp/ZGjNOsDy0Lekhm3MmTGfKlfEIisQhkYP/iaNwzMxJnI2z33mocw4uynjcqAPDIwPljJmcCubTi4va1/r+RLxldgrbkmcg1cLlhDDI2IrF8x9r7SBhZOpgVywJBBOcA4x/tTXkntIHWbhVHAMhvhInpPyxVy0G8xLc0/yNgkYryhRO/z/AIUo472ntZCKzkbESq+mc/as8vtFxLzOlQc4VdjiMz696vT0pdjlqqhTzfnHEl3RHlQ5UMp0qRMTKgHBwR5Uvue8Zi5cECARGo9PjYSes03a2ioSDOowGjVjybJiJzUHv2gSmEgAnA26GJ29a67OdoVpyxnTxO51Q2YAO8Z8JG2wr1vlqtnRLCCC5ycbbNt69aZHm6MhCDUyk4GcSBIGP1j1oo4q5rtqFEFAx8WBBbfrMDpRbFSKyciXOAST4oEmdpER2nIoY4JiRKjTOnAbVGmepNX0u3j71Q+8aIk9J3ABHbefOqfEcPcNoANpcvGARsuZ/F3/ABUWFBX5d1E9M6V/ivn9xVd+BkkBviUyGVc4G0KAOgpbx/N3t3xbInQdJYgwdUGd8b/an/DWCryS5DqWzp6AAQVMkeLr2FDVZBOysvLpwduohd9twu3pQuJ5cFA0EEn/AAkjzDRH9Ci2bb6bo1sC5BGPLA3z2qXEWHBTxjwr4iZzCiIOr1wZosKKq8nBMkCciIMRkgg6p6n61Wv8oAQkJiS0aok+Ygd43ppxHEPbNx5lEExsT4ZIjI7/AFpbwXO3uIwVSxUjoDgkDGB2mPvTVvIOgKcAcMC6wAABticFQTuT26fWAe8keIFp6yrARsYzv1pmeKJIQpPgVpg7TPpuNjQr/EoyKSIDEgT1jyYD6eVNSaE4odco1tbDuZLZjt0g+czV3TSrk7hLnu9g4+E9GXYgeYB+gp2616uhPdBHna0dsmBiuEUQiomtzIGRUSKIRXIoAERUYopFRimSQivVPTXaAH/Acaynf5/zp7avLdEEw3esVw3EFTWg5dxKPjY18n8j46b3I+ijJTWeRu3CsuZBHf8AnUwinfw+lctORsx9KsW+IM9sZmM/UVxfVJO0KTmUrvCsBIEjuKA6afix1zjHf0q9xHEqFLatAGSSYWBuTXzj2k9pn4g+7QlbSznvHXzOPh6etd+hKbwzN/uNOb+1Vu34bY1vGDsp/d21fYeZrKXLt/iGJctiCAp8Q3kGMKMHGJ880VOWqiNqcqxBYx8QGTPzjpRbPGKXFu3pkwxiIKErLTG+Zx/Gusj8nuC4BQgBXTkyAY2wYI8Ww3EV12tjSQJ1MVwDjbdYn5mjLwRIBZ2MMWESMEfDjfJGPIdqtLwiIBvEsTGASYnNKx0LeD5gt1ntIAHGoatOwmOu59Y60xHA6nnU0aAunodjOPn1oXA8sFtnc6JeJPUASYJHrk+QpkHthjktESAGbMDqBtRYkvZSHLUC6SdQB1QxkyGnuTvUuO4HUHgb7jTGMT1q3a4jUrBEn5rHU5zP2orhwXVioGJJY9V8yJ+tDkOhHyL2ftWVDLrZ2EPqjQMYC4796vBdLLIAGmAST5xgETufrUkv20BH7RbXc9CZOYksfpQr3M+GDKVus8LAA1b9YPp2pbmwpInw4Ylsgr6RvjYgnp1OKgtt4WSp8c/BgysbnM0uXn6+8ZSoNrLDS1zWciJnwxJO3cUa3zO0WCrYdjq150zHQSRSdhglxnJEdmdwQxgk56ADoY6VbQCV1OsAED8PQYy0dKp3uYk5XhTmNwJj6UGxzRw4b9m+GVgTPizmP3TRcnyGBjaRXTRrVpEYyQIgiPlvNU+O4NV2doHTSex3+tV35ixUqOGKsdYBKAkMPFMEZiRiq6cYxtlXslmIJ1hAo0mIxTVhY2SwQzMBIlTpIwY74OMd6rcJwIS47jSofOnAUZmB5ZoL84tM2bLocDEDzyZHQ11udWJhtYIH+Lb/ADGmnKqFjkMOFYrjOCAZmBBig3bEqAR3gRGYImPnQ7XMbMKq3iCJB1Ax5bgx8oonD8y1q0EDTPxR4hnKnUZmO3UUwtAL0KRcWNYKmc9BMH9K1KMHUONmAI9CJrO2LRKAsgggHByDABB27Uw5JxShCjsAUaBJgkHIwc7z9q6/ialNxZzfJha3IvMtRIozCoEV6VnCDivaanFd00WKgJWvaaLFeilYUC016jaa9RY6KbAg0ey8daecVys9BS1+AI6V87HXhJHuvTayi5wXMnXG486dpxIcCCVNZVUK0bjOONmy79QpA/eOB9zVOCeUJSa5FXtJzV+IunhkaUU5IgamG/qN/wBfRfZQICiQXIJnoMT16EiJ3mhcqtGAoyzZY7wrdPnn6DtFME4RUdmiZAXE6j4ySdu7dY9apJRVEZeQg4TBLamOYM/mAxA3Hmaha5cqXnuGAY0gAZ3GBAk7TUeN5xbjTrjSRCoAWJB/ESIGJ/nVR+MvPLBVtA/juGW3GJO2/aimK0Of2pE0LIDOPDrIGqBJI3J3nbrVXiOZ2pBe7JE4tgEZIAEhZ26yPlSFwjAFrj3jtCKY+EwNUFR4o6imKWCgLJaS2oUPrumTBaRgfu7ahuaK9jyTt8yB/wCXw5fGGfONQGCZ6+Yqf7VxT6mhEXxapAO0Ke/kKr8udbzhP2hwQdQATSvxBgQWEkao3NE43hrdtnIQXn1lgHyANRGJ29KltJDSbKdqyLU2jxKWxqHhtsMypJJAIPQdDQ14dHJAF26SsSAYDwT+IAE4nfoafWOUcSEDX7KJbAGQVU+IgCUJn9NjRuY8ELl39ntEKS+6nxDY5Pbc0OT9AlH2KRwEKQvCn4RJdlBmQ3RnhYMbdqJw9hwEizaQHU3iJP4Y6L5b+das+xVq0jOj3S6qWPiWHIEkFSOvrPnSF+FdzbstKhwoY9V1sVgdYzEfWiSkuRra+CmnFM59377h1LDQxhifCxIjxDPSjLwd/WfGgAUKGVN10wBlj27/AKVsrHsdwipoNoN3ZidR856H0ikFzhdBe2riVfSuoMZA8Pj/AMRxsRvTlCSWRKUW8CriOYC02g3SxAzCIYxifCf6NGSz74K1u8YLjVKJ1x+SQc/Kt1Y5DYRYFpCT8RYAknrJNIeN5Sti9/djQhCOwjE6mkIZxEA57iqejKMdzZC1Yye1IznEWynifiIMlvgt7xnGiYqjw/EG6NK3dgAQUQGJxHhBit3yblVt0d3RHYuwBZRhcEAfXelfPuQJbdLtlApZtJWDoHUHG3UQDmfI03pSUN94BakXLbWTKtw/EBNTOgx4vD0OCY1DO1Vlvs0qLlpjAWCrTAOI8eTitry7gveuqXEUqUOpYIBYEbAH9Z2pd7V+yqIBdtLpOoBlE9divYz8vpkWnNwc7wJzipKPZmjbuSwPDpIYAGQMgTOVPf0rlm1bJOrh2kmZBBA6HZuhnpWj4fhHcBGAUu6qSD4grIBrBIiZ6RWd9oeQPwjhldijZVtsjo3Tr86Ip7d3Q247tvZFhbVDD3EIidWrciRMgCNutD13WAJ0XlH4gRIwRkjH61fuXGZDpQu5CwsRJCSYG+AJpNy24rsRcRQ0MVZZUyAcE7/7UJ9j2o23K+Ka4mpkKDYdj+6O1XSKByhle0rLOfinJ1Y6+kVb0162nJuCbZ5epGptIFprumiaa5FVuJohpr2mpxXgKW4KI6a9RNNeosKNueGR8qfoarXeFGxX7Vl+H5v1D6fQn7ijf29e2DBh6CvmPol6PbyuHaGlzlQ3j6Vn/abgf+HfyKH6Os04Xn6th00nqVOaoe1HGoOGbTc1lioRDuW1Ax0MYrSCnGSsHK1kyrcQnDyW+JwBj4iRjA8qWvfd8OzIpj+7t5uMsYkjYfQDsKHYA1Hxw0GbhgkwPhtjy7mqvDXC1tyqlZYqCJLEEL4mY5JjE/4q6+DHkv8AC8M2l3RVtKhEkwznwsSBEqD5Enevco4hLnvSyMCoEM5LSC69Nh8Oy4yKn7P8uiy6hiJcTjsgxkHuKbck4RUdy+nZcr+8dwfQdqTlyikipwHKbnG8QB7420GZX4VA2ETBJOM0243hWZSN9ARYmWO4yNjEzS/mlhyyjh5lnliv4YEeKMwT+lPL1xAWVmQGBJLKIMd5Pn0qHwPsc2uSpY4CEUK7hGdoAJJdTB8htFJ+T8Ax4hCxEG5q3JUjXIEHY46dfpV3mHtdaZRZlQoCgkambw5wIjcDr1pNb50quGRbhIaQFQR1IOcTTlVquiY3Ts+g+0KA8O8x+Hf99azPLUVuJRjuGbO2Y6x6Uu4nn99hDWrrg7q7RMf4YA/2qmnE8TIKWQoOYYzGf3sfaqnK5JijGotH0njioR/EPhbqPymsdy62i30dmAiJ2AwxJPfaljDiXwRbUnPwTgY7E9vrUrw4nV4+JCYOdIXEjuOvp3olO2sDjGk0bh+b8OPxkx+VWP6Csvxzane4iSuv4iCDlh0idiKTPoBBbjkkdZQmcYihpoI/9y+gNpPw6cKDgdpn6USm5chGCXB9BbnFs/hf/IaT834pbjJoV8+GCsZmd9vvWSdLJC/8WRIgrKjMbwc0VhZlQvGOZMfEhmTgA96ctVuNMS00naNZy3jltI6FHJDFjgY8K9t69zXjVuIAiuCrhoZD0n+fzrJXUVCJ4l1MNh2TsdMY7j7VC49sbcY0kGfEkfXf/el90nHb0P64qW7s03KbyK6uwIUhs6T1OMb7jrVvnHFI9plQnVgwVbafT51i1uYBXjTpGrdkEED17sv1qduWgnjEn9+2ehnZ+8VUdVqDh7FKCclL0NeEdfeKfyFCxyYhjljsMCrPtSEdEK6HkmDIMYkCN8x9qz3D+/LQnEo7HXjBPh2/Gd5+9eB4l1y6MGMTpIz5EgxSU/Bw9g4+al6GPL7ZN+2SZ26bSGX+NIea8AiX3BEw5xsACew8jVlbvEozN7q2SANmAOIgrMQc71V4jirgfVdRyZBJZQ84/ERk9Kl24qK9lppSbfovex97UhQ7kBvmPC3/AG/StCy1juW81RHRvACpPhAKSDONJG+fOtHY5wjuqBXBbuBpHX4pzXbo6qUdrOLWhctyLZWuaaLpruiujeY7QOmuhaMEqQSlvHQGK9R9Feo3hRkURx0q3w4amdxiPC6kHp0rycEjf/IB6j+Ved9qfJ6P11wRtifipN7SrL2lG0N/9kBjzg/emhtMhwZHcbGqPtDxSoluctqJAHxExiB9aqlVolvpmet8MSydF91IEHAgYgfT5Va4BESyUc6SxZpggQYAwRv4ZqtfZ2I94wSQAqICzmMY3jffIzUPeooZlCqFIXXdOpi3XSvlG8ioavkVjXhOYaFIsq7iSSYgSYA8ZMRAHQV69xV1tOr3drOqWknwznUcH02ofOv7pQ5d21AeBG0KPCsnUPEc9ya9wt22yI6oqyg068kPJ1ZPTApPHRS/IW1pc6TxLOzHASYZie41DP8AGrK8uTMcPcf4hqcgDePxP5fl60u5TzG/+1pbuMGVyTEAQAN1gTP/AJ7Uw9o7buiqSwAG2YO8Z6/PvT2sSaov8LwDjVCWkEMRDajOnAMKN/I1C5xhQarvEBSZwiEmR4TGot9az3sbfuMl8TCKJXsD1H2E9K57TkraLE5mJ7eKNu8frUuNS2lbvGzT8r4pLjjRfe4IhkKopnSxyAgOSN/WqnMblu0gZjdf9644HfPigdfvSD/8cIBfYgnIX6EP/GKu+1p/u9EkzpPnk5zG2M05Q8qsSl42e5fzfhL7+7NpQzfC0swxncxkx960XMLaIC7IrFUT4gJMLAMnO8z86+acqlOItAbswj9K33tTcK2GSJm2g+cPInczilqRSaoISbRmT7WqTBtpp28KEYz8LAz1rSa1uFXU+BwjKQYMZ0jG8Ga+Y8WxDaAJIiO+YgetfQeWWiOHQXLbBlVVKlSpwdj12CHPQUasEopoNKbcmmUuce2Jt3NNsZTwswCnxdRJxvj5Vd5bzz9ptNIEqZgYnuCu3byNYq9YD3LkmPG5/wCqmvspYAa6pAMKrDHmf6+Zq56cdhKlLeaHnPOP2VWaCxeFA3AJRWkk9vWaU8n9qGe4NYBERpKgHTj4SPlv2o3tnwsqjCR44IgjZFHp0NZfgLOm+m+Tp88gjFKGlFwvsc5yUscH0/3aTcYqDhGJC7nIBjp6VlLntatxyES2FkwHXLCZ7xtWj4DhxoI0gSlsx89znea+ZXeF0OpHRl/UVOlCLTsepJqmj6Rw3unNlyihvEjAdirSPMZB/wBqQcz5rw6vot2V1LGs/CdXUYGfWnPJFlCzFj413OwKuMDbt06Vi/aCwU4xu2pR8iq798k1UIqTYpyaSaNZwNy24S4mtSrQwDtnBwcx1BHpVPn3GKtxV/aX1QCQVVgs5WSVxg99vWocnDQxmQChgQB8Qjz60k53YP7VcEfl+6Kd/t8qIRy8jlLCNClt2DKwDtpDqYhSpJBmdXbcAR51WW0JANspJjUjDQCT12/+poKuy2CJjwXFEbjTDb+hxVPlDsquudJAbyBDAznynahWsjlTo+ocv4TQir4pgTqMmYz/AEMVZ00Oze1orA5ZQZjuOtDdboE6p8tNdKlg43HJaCVIJQbbvALEL3LCP41S4rmSD8c+SjH1p22FIaQK9SD+1k/xfU/zrtFMMGiuWrrbhWnod/vURym0SBchSei7j1HSqw44nea6AWbwglj5gfc9a8apR5dfg9ZxTQXjeR21yl0D/CZP3FfOuaB0vXNfxFjnc6PEFVPy40mezVvXtMpgqw8sH9Kw3tDaZ+JfTjeehBAA+hECurSm2ubOeUdop4jiNKMggA/k3A3JZpksYg/1K3iXgsp89/U004Tktx2AxOGfOQpLbjvj7VfvclR7guPdVROVMA4JOSSMT2rcydnebEeEajOnoT0JEQcdKLytB7lJ6HV33Z9/66UXiLHDP47t2DsFU7AEmMTnJo/DcVw6kAK7qANKhT0/3NS06H2LeXWh+3Kd9KuYHnI/lT7m7tobBMqIgE/hnpQl5giyU4R/XSF/ge9Gt80cwF4dFxgs4H8BTvIJYFfsRw7Jav6gUDMdOoEeEARg9PWu+1HK79y2VRC2tpBER8U/SP1ps3FcTpZdFoBsGHJO3SKkOKv4GuwsDEmcejCfrRnduFXjtFnsfyi7ZclkYHSoxEkiZzOKtc45Y/FBPdaApCGGaDjOcedG4fibznwcTY7kIEkZ69sdagvMen7csdNJTYdN6Ty7GuKFaeyzrctuxBCsD4ZznYGI61o+d8tN8e6+BighviwNS9Izmqv7YGj/AI09/iURB2+LfyqPE3AhGribhlQcSwgneQdtx60nnkFjgVt7DFWa41wk6Y+A/lzAg5j9a0nEcO1z3rOs6dMkaxJRBkADJxvmlL3reoA3eIiJ2YkyMQNEg/zqdhuHYke9uwoyX1KZGNiomf1ok3JZBKngBa9jUy5uuA5Y5UbE6s4xRuH9m14fXcR2ckaY04kZ6CYrq3LQJCPfO8EC6I/6D51D/h8uFuzpyf72T0E+ClubVDqixzrkpuMieIL4mkLGQNsyMyTuKW/+jxqDa7g0kNJQHrMY9KLcNoKCvvMgEH+8OOuyGq+pJWPeR1P958p8E5qVJxxY2kzQcu4FtTJMlFUavF4sn5CkHEewhf8A+Q9T8Bx9qgrIIHvHkgmBrEx1GpMwJwK6nFJB1XLoyOjxHX8BqoyrgTVjOzyx7K6SdWtk/wAMQ3p5xSrn3sw9+8zq4WNJ8QJEjzxtGcVFryASL1wfFMloH5TlPQ1xOK+EniLpBEyuc/5dqalTtCaTVMknLn4ctqIeU2X1kGfl5YqnzrlD+9F4MoDouGOQQFH4QfvV69xqgCOIcg4OrRA+tdu8UTa1NxKkdFYIRIkQviz0GO9ONpg6Yvs2UCKHuICzOABqOGQLnyMfeqnD8DfBI0YKusyIPhYSDPerI8RDE2mIMjwtM/8A8tVriOKulPduiFdo1Msb90J60WuB5NN7PO/ugsSUMRAMgjUCG+o+VPrdyRgQfMV8xtXGRdKq6nIBS4sjz/CTH8K2HslxTtb0MrnQSDcc/Ed4ySZAPpRKVRI23Iv8Ty65c+NxHQARSziORuD4QCPOK0TvQWumoXyWivpTM5/Y1z8ortP/AHvnXqf9WxfQije44I6IRl9UQPyrqP27Vfs8eYEAR6ZPria+df2uV4iw1wKAiu0kxOpCATv1AE1qn9orAQstt2iRJwsjAkyT9qc9CL6suHyG1ljXmPtEtiC5YlgSAAcx0HT5Vhr3Hu7u+pULS0Aa3y0iQNu23Sm1vjzeZrrhQFGlRnTiTgznr160m4hgi3NK7AbRMuSN5mRn60tPQjB2lQp6m48yaj4jdecaiQo2nIlT8qglpQ4U20DEatJcltMT8JBqsVY37ZglVXBk76WDHbqRUktluJDHT8TbTGFYRPaBWhJav8attwrNbRjEAITE7CQQBuN6tcVeKLre62CQAiqSYAn4wfWsxzwEu5JB8ZAwROcR5RFM+bsSVAYBQGgAA7lZ23M0n0wvkvct48XVbQ7zIWDokajg4AjPap8z5illioFx1XBJuuBI3jJ8xSX2TP8Aeucx4M9s4+hipc9tlUYOTLMwAgYzjYb09vlRO7xs0nCcSl+yzornVAguT+KMhsdKT8Zz1bH/AC7dswIllmSYmAPMbzXPZMEWDkxr3ECAM/WTSXnlsYWTuTuJ2PTYUbfOgcvGzXez/MF4lWbQqEBwY6EiRHcZmq3N+cPabRaCN+EEjck6gBPrMntVX2HSEuQfzj/pWqHtEmjP4i7EGZMaRA7U3DzSBS8bGnKeeOWZL6qA8kFSD4smGAM+eI2pvz/jhZUMFE+7XcfCAPIkGZIg9qxPKrrtftqWJGmI8PwhCdOBtWt9qWH7O4JJkIJwMSBGMU5aa3UKM242Y8e1HEBtQYHYwRO23pW89nuJS7aa4QJdM6hOnTgkepnavmNyyoPy/N5elfQvZv8A9unUFGB6yAxEE+mKqcIpWiYTk3TE/tD7VuLht2/AFwYiZ6gTsP8AzVn2b9o7jMEJ1K2cwD5z0pBzPlwN24dzqbvA8UQMdKsez3C6b6LAOo4/o4/3olpeFpAtV76ZpOacf7iy7LBMwIIMSREkdMz8qytnnt5WBLkyZOBHliNqf+1lubBMHLDEDoyjEGY9BWRtWsbEdOtRGC23RcpvdRvG4vWltjghoMdijT+n6Uh5/wA+cPoTwAAE4EmQDAnGNsdQaackuJC6lTdTOAfg+3p5VmOdWPG+OvTIiBt5VMIq8lTn44HXK+aO66X8YYYMCfmNqp815rctKirhmUyTuB5TQ/Z60jaNS5DHfpAMb7jP2rntVak22nV4CMHaCMGPWqUFvyQ5PbaLfJ+a3NQLnWp6MBOSPL+vtRucc1K2dKqCdTICRssk5/rrSXllwqFxBDdRmMRTPn7q1lPENQuOYB6Qc+Q2oUfLgFLxKvLL+tWDKoZYYMFGwYTIq1zHmCDiGU2kKgjU0eIyAZB7CdvKq3KtONpZWj10k/qK7x7g32J2KoRnoUWfuDSayzRSwi/x/EKi20KsRqceF2AADfFg5OR9K1fsvxSW0NtpJZiASd8wMk9vr51kOYlSiHsQd/z21P6qaBxXEEaCCcfXKI3+qspRcltQ3Pbk+n8wvsqsECs+lmVCwEhY1GT0E1h+M9q+KUBvd6Vb4SUMHMfEcUjbmNyZbWWMQ+fIRHb/AM0G3x74UzviQQM9u1OGgl+pWY6mu5fptDX/ANX8T3H+Vf8ATXqQ/wBoH8g+g/nXa2+mH9pj9k/bNjwyWXQIxRnaGAcqXIwRtkHbHrXOYWShUKgbGY1wI+EY+f2onF3rIewFysliUgwArCI2OSOvSm1q1rXVbKuBuFnUP3k+IVKi4cd5Ou1NV6wZR/eEAMlkKIJ8BJ+UjfO9dvXCQw0zqgYIG3UknG/2p7cAzj9apPbE7D6GrTb5M3FLgUX+MK3V0zAwSdtJ1ZEbn+vQ9ti1zWU8IDMDqXJggALvOZq01lf6FcHDp6/SntJtirjbZdoFvGrJlAANWSfsavcc5dRpSSCQYGw1Y+1H/ZF/LXm4VO33o2oLKHILTWw7OhEssDBMR0Gf4VDnFh3PhtuVJkkwB6jrTEcMnYfeue5TsPvVbfKxXigXKHPD8MNakElpURq3aD6R50r4i179nYq4CRsp6zkinItp2Fe90v5RTWHfZLyqOcnT3FtyAVBYkBgZIIG0+kZqlf4H9ovEHVpjVIImRpHX17dKYG2vYfSolF7CivKx9UWeD9lURg4utK5yVj4CoxG8E005pyz3qG3rUTAmO2e9IvdL5fauNbXt+lNtPoSwqBvyA2VAN5IJ3Kwdv3vKnXBTat6DBIRojEy0x5b0nFtamltY2ok7VAltdneF5O9wcU4SWybQ1dSxJ2MdOtUuWcG6Mt24wRkyq4OoHzB3mnHBX3tToYrJBMBSMbTINVuItq7E6VWZJC6gM+p8+lCk6oKVpizm9i5duKygmUUnIABlpiTVc8ovD8I7/Gnn/ipweHAAGnA7zFRa0O33pJUgll2VES+qgaNRUgBdaZHiJjOOp+dVX4O9cZm0BTvBdI+s96aG0B0r3u6ePQslKzy68rBoSQSfjT/V3ipXuWu5AeFgMx0uhM6RgeLuAPnVoWa57seVCqwe6hV/ZbFyEYEAASxVTOZGTn1Fc4rlV1lklJHUuh6eRJOOwpsEHf8ASu+6FGAyI14B1WBonIBE4kEdaP8AszalIgeFQRIiQGE79Qx6U0Nhe5+prw4Re7/5mooMlV+E8OmEmVIIIOIz17GongpWDpEE5DDb+iKvDgVP43HT4v8AxRE5d2uXP8w/lSr9gbkK25axOWjaMg9evzBE+de/YHXdgQMyDO8dwO4p0eXP0uv9Z8+4oX9mP/8AtPzVv9eMR9KTb9CyJY9fv/pr1Nv7GPcf5W/116oz6F5kV8OxbG2T/OupcKnUpII6gkEehr1CatDXgajnmrF5A/8AjGLg+Y3+dHFhbgmw4f8AwMQrjH3rOtvROX/85P3hUVRSk3yX+IDoYYFT2I/TpQPeHvWm9pf+SPX+BrJ3d/kKaE+QvvfP6zXGuDaf0qsu5rveqJLGvpv1rnvPKgv/AC/WiJuP66UCCapx/Cg3L6oQCY1eRj9MUU7n5/oaqXNh6igC17wede19p+n6UBNz8q5f2pgWBcP8pNSZ/lQOH6en8qk2xoAmH71IXOy1BP6/ymoDf5j+FMC1reN9I8v41Bo6mR/W1cNQf4h61IBTfxAyKGGPXf0qC9PSo3+n9dRQAYvFRa4e4FBb+VcXcen/AG0AHDx1rrPvH9fah9T8/wBai+w9T+poGFU9q8rf1ig29x6/yrrfwoAKbnnUvexmhDcVDpVCLiXQc/186Nauz1pf1ozdPX+NADJbp/r+dSa9/Wf9qCeny/Wu8Zt9P1NSUH96fP6CvVTr1AH/2Q=="
+                                 alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p id="card_p" style="overflow: auto" class="card-text">This is a wider card with supporting
+                                    text below as a natural lead-in to additional content. This card has even longer content
+                                    than the first to show that equal height action</p>
+                                <button>모달</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!--!&#45;&#45;ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅇㅇㅇㅇㅇㅇㅡㅡㅡ 모달창 ㅡㅡㅡㅡㅇㅇㅇㅇㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ&ndash;&gt;-->
+    <!--<div class="modal">-->
+    <!--    <img src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"-->
+    <!--         class="modal__life">-->
 
 
-<!--    </img>-->
-<!--    <div class="modal__right">-->
-<!--        <div class="modal__right__index">제목-->
+    <!--    </img>-->
+    <!--    <div class="modal__right">-->
+    <!--        <div class="modal__right__index">제목-->
 
-<!--        </div>-->
-<!--        <div class="modal__right__summary">-->
-<!--            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리-->
+    <!--        </div>-->
+    <!--        <div class="modal__right__summary">-->
+    <!--            줄거리줄거리줄거리줄거리줄거리줄거리줄거리거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리줄거리-->
 
-<!--        </div>-->
-<!--        <div class="modal__right__cast"-->
-<!--        "> 출연진-->
+    <!--        </div>-->
+    <!--        <div class="modal__right__cast"-->
+    <!--        "> 출연진-->
 
-<!--    </div>-->
+    <!--    </div>-->
 
-<!--    <div class="modal__right__cc">-->
+    <!--    <div class="modal__right__cc">-->
 
-<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
-<!--                class="btn btn-outline-primary choice">-->
+    <!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                class="btn btn-outline-primary choice">-->
 
-<!--            <strong>선택</strong>-->
+    <!--            <strong>선택</strong>-->
 
-<!--        </button>-->
+    <!--        </button>-->
 
-<!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
-<!--                class="btn btn-outline-primary cancel">-->
+    <!--        <button type="button" style="width: 97%; margin-left: 4px; margin-top: 5px"-->
+    <!--                class="btn btn-outline-primary cancel">-->
 
-<!--            <strong>돌아가기</strong>-->
-<!--        </button>-->
+    <!--            <strong>돌아가기</strong>-->
+    <!--        </button>-->
 
-<!--    </div>-->
+    <!--    </div>-->
 
-<!--</div>-->
-
-
-<!--</div>-->
-
-<!--test 지울거-->
-<!--<button type="button" class="btn btn-primary"-->
-<!--      data-toggle="modal" data-target="#exampleModal">-->
-<!--        Launch demo modal-->
-<!--</button>-->
-
-<!--<div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="exampleModalLabel">-->
-<!--                    Modal title-->
-<!--                </h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                ...-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">-->
-<!--                    Close-->
-<!--                </button>-->
-<!--                <button type="button" class="btn btn-primary">-->
-<!--                    Save changes-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+    <!--</div>-->
 
 
+    <!--</div>-->
+
+    <!--test 지울거-->
+
+
+<!--    <script src="static/vendor/jquery/jquery.min.js"></script>-->
+<!--    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+
+    <script src="static/js/isotope.min.js"></script>
+    <script src="static/js/owl-carousel.js"></script>
+    <script src="static/js/lightbox.js"></script>
+    <script src="static/js/custom.js"></script>
+    <script>
+        //according to loftblog tut
+        $(".main-menu li:first").addClass("active");
+
+        var showSection = function showSection(section, isAnimate) {
+            var direction = section.replace(/#/, ""),
+                reqSection = $(".section").filter(
+                    '[data-section="' + direction + '"]'
+                ),
+                reqSectionPos = reqSection.offset().top - 0;
+
+            if (isAnimate) {
+                $("body, html").animate(
+                    {
+                        scrollTop: reqSectionPos
+                    },
+                    800
+                );
+            } else {
+                $("body, html").scrollTop(reqSectionPos);
+            }
+        };
+
+        var checkSection = function checkSection() {
+            $(".section").each(function () {
+                var $this = $(this),
+                    topEdge = $this.offset().top - 80,
+                    bottomEdge = topEdge + $this.height(),
+                    wScroll = $(window).scrollTop();
+                if (topEdge < wScroll && bottomEdge > wScroll) {
+                    var currentId = $this.data("section"),
+                        reqLink = $("a").filter("[href*=\\#" + currentId + "]");
+                    reqLink
+                        .closest("li")
+                        .addClass("active")
+                        .siblings()
+                        .removeClass("active");
+                }
+            });
+        };
+
+        $(".main-menu").on("click", "a", function (e) {
+            e.preventDefault();
+            showSection($(this).attr("href"), true);
+        });
+
+        $(window).scroll(function () {
+            checkSection();
+        });
+        // 모달 script
+        $(document).ready(function () {
+            $("#myBtn").click(function () {
+                $("#myModal").modal();
+            });
+        });
+    </script>
 </body>
 
 </html>
