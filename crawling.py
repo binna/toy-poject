@@ -87,7 +87,7 @@ def collect_wavve(url, name, driver):
 def collect_reset():
     db.data.drop()
 
-    driver = webdriver.Chrome('/Users/jinwoojung/Downloads/chromedriver')
+    driver = webdriver.Chrome('/Users/frankie/Desktop/web-sparta/chromedriver')
     # driver = webdriver.Chrome('./chromedriver')
 
     try:
