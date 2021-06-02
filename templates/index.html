@@ -10,7 +10,7 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <!--    템플릿 적용 CSS / JS-->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link
             href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
             rel="stylesheet"
@@ -24,8 +24,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
-<!--                부트스트랩 3.4.1 불러오면 CSS가 날뜀;-->
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -34,9 +32,6 @@
             crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!-- TODO 구글폰트, 나중에 원할때 하자 -->
-
-    <!--    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
@@ -159,19 +154,8 @@
     <!-- JavaScript -->
     <script>
         $(document).ready(function () {
-            $('#card-box').html("")
             showAll()
-            $.ajax({
-                type: "GET",
-                url: "/api/data",
-                success: function (response) {
-                    if (response['data'].length <= 0) {
-                        alert('데이터 세팅을 해주세요!')
-                        $('#DataResetBtn').focus()
-                    }
-                    console.log(response['data'])
-                }
-            })
+            showCookie()
         })
 
         function dataReset() {
@@ -188,13 +172,18 @@
 
         function showAll() {
             $(".first").html("");
-            $(".second").html("");
             $.ajax({
                 type: "GET",
                 url: "/api/data/all",
                 data: {},
                 success: function (response) {
                     let allContents = response['data']
+
+                    if (response['data'].length <= 0) {
+                        alert('데이터 세팅을 해주세요!')
+                        $('#DataResetBtn').focus()
+                    }
+
                     for (let i = 0; i < allContents.length; i++) {
                         let name = allContents[i]['name']
                         let title = allContents[i]['title']
@@ -206,6 +195,7 @@
                                                 <input class="${title}" value="${name}" type="hidden">
                                                 <input class="${title}" value="${desc}" type="hidden">
                                             </button>
+                                            <button onclick="toggleCookie(this)" class="${title}" style="position: absolute; background-color: white">선택하기</button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -213,24 +203,20 @@
             })
         }
 
-        function SettingModal(id) {
-            let classNames = document.getElementsByClassName(id)
-
-            $('#modal-title').text(id);
-            $('#modal_img').attr("src", classNames[0].getAttribute('src'));
-            $('#modal_desc').text(classNames[2].getAttribute('value'));
-        }
-
-
         function showDrama() {
             $("#card-box").html("");
-            // $(".second").html("");
             $.ajax({
                 type: "GET",
                 url: "/api/data/drama",
                 data: {},
                 success: function (response) {
                     let allDrama = response['data']
+
+                    if (response['data'].length <= 0) {
+                        alert('데이터 세팅을 해주세요!')
+                        $('#DataResetBtn').focus()
+                    }
+
                     for (let i = 0; i < allDrama.length; i++) {
                         let name = allDrama[i]['name']
                         let title = allDrama[i]['title']
@@ -242,6 +228,7 @@
                                                 <input class="${title}" value="${name}" type="hidden">
                                                 <input class="${title}" value="${desc}" type="hidden">
                                             </button>
+                                            <button onclick="toggleCookie(this)" class="${title}" style="position: absolute; background-color: white">선택하기</button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -258,6 +245,12 @@
                 data: {},
                 success: function (response) {
                     let allEntertainment = response['data']
+
+                    if (response['data'].length <= 0) {
+                        alert('데이터 세팅을 해주세요!')
+                        $('#DataResetBtn').focus()
+                    }
+
                     for (let i = 0; i < allEntertainment.length; i++) {
                         let name = allEntertainment[i]['name']
                         let title = allEntertainment[i]['title']
@@ -269,6 +262,7 @@
                                                 <input class="${title}" value="${name}" type="hidden">
                                                 <input class="${title}" value="${desc}" type="hidden">
                                             </button>
+                                            <button onclick="toggleCookie(this)" class="${title}" style="position: absolute; background-color: white">선택하기</button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -277,7 +271,56 @@
             })
         }
 
+        function SettingModal(id) {
+            let classNames = document.getElementsByClassName(id)
 
+            $('#modal-title').text(id);
+            $('#modal_img').attr("src", classNames[0].getAttribute('src'));
+            $('#modal_desc').text(classNames[2].getAttribute('value'));
+        }
+
+
+        function showCookie() {
+            let cookeList = document.cookie.split('; ');
+
+            for (let i = 0; i < cookeList.length; i++) {
+                let titleName = cookeList[i].split('=')[0];
+                let temp_html = `<p>${titleName}<button type="button" class="${titleName}" onclick="toggleCookie(this)">지우기</button></p>`;
+
+                $('#select-list').append(temp_html);
+            }
+        }
+
+        function isCookie(target) {
+            let cookeList = document.cookie.split('; ');
+
+            for (let i = 0; i < cookeList.length; i++) {
+                let titleName = cookeList[i].split('=')[0];
+
+                if (target.replaceAll(" ", "") == titleName) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function toggleCookie(e) {
+            let selectionMedia = e.getAttribute('class');
+            let exDate = new Date();
+
+            if (isCookie(selectionMedia)) {
+                let cookie_value = escape(selectionMedia) + '; expires=' + exDate.toUTCString();
+                document.cookie = selectionMedia.replaceAll(" ", "") + '=' + cookie_value;
+                $('#select-list').empty();
+                showCookie();
+                return;
+            }
+            exDate.setDate(exDate.getDate() + 1);
+            let cookie_value = escape(selectionMedia) + '; expires=' + exDate.toUTCString();
+            document.cookie = selectionMedia.replaceAll(" ", "") + '=' + cookie_value;
+            $('#select-list').empty();
+            showCookie();
+        }
     </script>
 
 
@@ -293,14 +336,7 @@
             </span>
         </div>
         <hr class="hr-1">
-        <div class="basket_txt">
-            <p>오월의 청춘</p>
-        </div>
-        <hr class="hr-2">
-        <div class="basket_btn">
-            <button type="button" class="btn btn-outline-success btn-select">찾기</button>
-            <button type="button" class="btn btn-outline-dark btn-cancel">지우기</button>
-        </div>
+        <div id="select-list" class="basket_txt"></div>
     </div>
     <div style="float: right">
         <button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
