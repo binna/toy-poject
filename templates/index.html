@@ -99,6 +99,61 @@
             overflow: auto;
         }
 
+        .sideBanner {
+            position: absolute;
+            width: 200px;
+            /*height: 470px;*/
+            height: auto;
+            top: 50px;
+            background-color: floralwhite;
+            color: #ffffff;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            border: solid 1px black;
+            border-radius: 10px;
+            /*display: block;*/
+            /*float: right;*/
+            margin: 80px 0px 0px 1200px;
+            padding-top: 10px;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+            z-index: 5;
+
+        }
+        .hr-1 {
+            margin: 7px 0px 7px 0px;
+        }
+        .basket_txt {
+            height: 200px;
+        }
+        .btn-select {
+            background-color: white;
+            border-radius: 50px;
+            float: left;
+            text-align: center;
+            font-size: 20px;
+            margin: 0px 0px 16px 23px;
+        }
+        .btn-cancel {
+            background-color: white;
+            border-radius: 50px;
+            float: right;
+            text-align: center;
+            font-size: 20px;
+            margin: 0px 23px 16px 0px;
+        }
+        .radio_label:hover {
+            color: #a43f49;
+        }
+        .isotope-toolbar {
+            text-align: center;
+            margin: 0px 70px 20px 0px;
+        }
+        .modal-content {
+            width: 100%;
+            margin: auto auto auto 30px;
+            top: 150px;
+        }
     </style>
 
     <!-- JavaScript -->
@@ -168,7 +223,7 @@
 
 
         function showDrama() {
-            // $(".first").html("");
+            $("#card-box").html("");
             // $(".second").html("");
             $.ajax({
                 type: "GET",
@@ -181,46 +236,12 @@
                         let title = allDrama[i]['title']
                         let image = allDrama[i]['image']
                         let desc = allDrama[i]['desc']
-                        let temp_html = `<div id="card ${name}" class="card">
-                                            <div id="card_img_base">
-                                                <img id="card_img" class="card-img-top" src=${image} alt="Card image cap">
-                                            </div>
-                                            <div class="card-body">
-                                              <h5 class="card-title">${title}</h5>
-                                              <p id="card_p" class="card-text">${desc}</p>
-                                              <button type="button" class="btn btn-primary"
-                                                      data-toggle="modal" data-target="#exampleModal${name}">
-                                                        자세히 보기
-                                              </button>
-
-                                              <div class="modal fade" id="exampleModal${name}" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel"
-                                                                    style="color: black">
-                                                                    ${title}
-                                                                </h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body" style="color: black">
-                                                                <img src=${image}>
-                                                                <hr/>
-                                                                <div>
-                                                                    ${desc}
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                                    닫기
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        let temp_html = `<div class="card">
+                                            <button id="${title}" onclick="SettingModal(this.id)" type="button" data-toggle="modal" data-target="#exampleModal">
+                                                <img id="card_img" class="card-img-top ${title}" src=${image} alt="Card image cap" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0">
+                                                <input class="${title}" value="${name}" type="hidden">
+                                                <input class="${title}" value="${desc}" type="hidden">
+                                            </button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -230,8 +251,7 @@
         }
 
         function showEntertainment() {
-            $(".first").html("");
-            $(".second").html("");
+            $("#card-box").html("");
             $.ajax({
                 type: "GET",
                 url: "/api/data/entertainment",
@@ -243,46 +263,12 @@
                         let title = allEntertainment[i]['title']
                         let image = allEntertainment[i]['image']
                         let desc = allEntertainment[i]['desc']
-                        let temp_html = `<div id="card ${name}" class="card">
-                                            <div id="card_img_base">
-                                                <img id="card_img" class="card-img-top" src=${image} alt="Card image cap">
-                                            </div>
-                                            <div class="card-body">
-                                              <h5 class="card-title">${title}</h5>
-                                              <p id="card_p" class="card-text">${desc}</p>
-                                              <button type="button" class="btn btn-primary"
-                                                      data-toggle="modal" data-target="#exampleModal${name}">
-                                                        자세히 보기
-                                              </button>
-
-                                              <div class="modal fade" id="exampleModal${name}" data-backdrop="static" data-keyboard="false" role="dialog" tabindex="-1">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel"
-                                                                    style="color: black">
-                                                                    ${title}
-                                                                </h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body" style="color: black">
-                                                                <img src=${image}>
-                                                                <hr/>
-                                                                <div>
-                                                                    ${desc}
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                                    닫기
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        let temp_html = `<div class="card">
+                                            <button id="${title}" onclick="SettingModal(this.id)" type="button" data-toggle="modal" data-target="#exampleModal">
+                                                <img id="card_img" class="card-img-top ${title}" src=${image} alt="Card image cap" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0">
+                                                <input class="${title}" value="${name}" type="hidden">
+                                                <input class="${title}" value="${desc}" type="hidden">
+                                            </button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -300,6 +286,22 @@
 </head>
 
 <body>
+    <div class="sideBanner">
+        <div>
+            <span class="txt-label">
+              당신이 선택한 컨텐츠⬇︎⬇︎⬇︎
+            </span>
+        </div>
+        <hr class="hr-1">
+        <div class="basket_txt">
+            <p>오월의 청춘</p>
+        </div>
+        <hr class="hr-2">
+        <div class="basket_btn">
+            <button type="button" class="btn btn-outline-success btn-select">찾기</button>
+            <button type="button" class="btn btn-outline-dark btn-cancel">지우기</button>
+        </div>
+    </div>
     <div style="float: right">
         <button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
     </div>
@@ -308,7 +310,7 @@
         <!-- Sidebar Menu -->
         <div class="responsive-nav">
             <i class="fa fa-bars" id="menu-toggle"></i>
-            <div id="menu" class="menu">
+            <div id="menu" class="menu" style="z-index: 1!important;">
                 <i class="fa fa-times" id="menu-close"></i>
                 <div class="container">
                     <div class="image">
@@ -379,42 +381,38 @@
                 <div style="width: 1000px" class="row">
                     <div class="isotope-wrapper">
                         <form class="isotope-toolbar">
-                            <label
+                            <label class="radio_label"
                             ><input
                                     type="radio"
                                     data-type="*"
                                     checked=""
                                     name="isotope-filter"
                             />
-                                <span>all</span></label
+                                <span>전체</span></label
                             >
-                            <label
+                            <label class="radio_label"
+                                   onclick="showDrama()"
                             ><input
                                     type="radio"
-                                    data-type="people"
+                                    data-type="drama"
                                     name="isotope-filter"
                             />
-                                <span>people</span></label
+                                <span>드라마</span></label
                             >
-                            <label
+                            <label class="radio_label"
+                                   onclick="showEntertainment()"
                             ><input
                                     type="radio"
-                                    data-type="nature"
+                                    data-type="entertainment"
                                     name="isotope-filter"
                             />
-                                <span>nature</span></label
-                            >
-                            <label
-                            ><input
-                                    type="radio"
-                                    data-type="animals"
-                                    name="isotope-filter"
-                            />
-                                <span>animals</span></label
+                                <span>예능</span></label
                             >
                         </form>
                     </div>
-                    <div id="card-box" class="card-deck"></div>
+                    <div id="card-box" class="card-deck" style="width: 79%">
+
+                    </div>
                 </div>
             </div>
         </section>
@@ -505,6 +503,20 @@
                 $("#myModal").modal();
             });
         });
+        // 장바구니 스크롤
+        let floatPosition = parseInt($(".sideBanner").css('top'))
+
+        // scroll 인식
+        $(window).scroll(function () {
+            // 현재 스크롤 위치
+            let currentTop = $(window).scrollTop();
+            let bannerTop = currentTop + floatPosition + "px";
+
+            //이동 애니메이션
+            $(".sideBanner").stop().animate({
+                "top": bannerTop
+            }, 500);
+        }).scroll();
     </script>
 </body>
 
