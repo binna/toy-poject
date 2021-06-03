@@ -367,6 +367,10 @@
                 result['wavve']++;
             }
 
+            if (result['watcha'] == 0 && result['wavve']) {
+                alert('1개 이상 선택하셔야 추천이 가능합니다.')
+                return;
+            }
             if (result['watcha'] < result['wavve']) {
                 alert('wavve가 성향에 더 잘 맞습니다.')
                 $('#select-list').empty();
