@@ -320,11 +320,13 @@
         function isCookie(target) {
             let cookeList = document.cookie.split('; ');
 
-            for (let i = 0; i < cookeList.length; i++) {
-                let titleName = cookeList[i].split('=')[0];
+            if (cookeList != '') {
+                for (let i = 0; i < cookeList.length; i++) {
+                    let titleName = cookeList[i].split('=')[0];
 
-                if (target == titleName) {
-                    return true;
+                    if (target == titleName) {
+                        return true;
+                    }
                 }
             }
             return false;
