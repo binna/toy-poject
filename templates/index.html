@@ -168,7 +168,7 @@
         $(document).ready(function () {
             $('#select-list').html("")
             showAll()
-            // showCookie()
+            showCookie()
         })
 
         function dataReset() {
@@ -201,13 +201,15 @@
                         let title = allContents[i]['title']
                         let image = allContents[i]['image']
                         let desc = allContents[i]['desc']
+                        let type = allContents[i]['type']
+
                         let temp_html = `<div class="card">
                                             <button id="${title}" onclick="SettingModal(this.id)" type="button" data-toggle="modal" data-target="#exampleModal">
                                                 <img id="card_img" class="card-img-top ${title}" src=${image} alt="Card image cap" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0">
                                                 <input class="${title}" value="${name}" type="hidden">
                                                 <input class="${title}" value="${desc}" type="hidden">
                                             </button>
-                                            <button onclick="toggleCookie(this)" class="${title}" style="position: absolute; background-color: white">선택하기</button>
+                                            <button onclick="toggleCookie(this)" class="${title} &${type}" style="position: absolute; background-color: white">선택하기</button>
                                         </div>`
                         $('#card-box').append(temp_html)
                     }
@@ -288,6 +290,12 @@
 
             $('#modal-title').text(id);
             $('#modal_img').attr("src", classNames[0].getAttribute('src'));
+
+            if (classNames[2].getAttribute('value') == 'null') {
+                $('#modal_desc').text('')
+                $('#modal_desc').append(`<a href="https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=1&acr=1&acq=dhdnjfdml&qdt=0&ie=utf8&query=${id}" target="_blank">${id} 네이버 검색하기</a>`);
+                return;
+            }
             $('#modal_desc').text(classNames[2].getAttribute('value'));
         }
 
@@ -295,15 +303,17 @@
         function showCookie() {
             let cookeList = document.cookie.split('; ');
 
-            for (let i = 0; i < cookeList.length; i++) {
-                let titleName = cookeList[i].split('=')[0];
-                let temp_html = `<p style="overflow: hidden">${titleName}<button type="button"
+            if (cookeList != '') {
+                for (let i = 0; i < cookeList.length; i++) {
+                    let titleName = cookeList[i].split('=')[0];
+                    let temp_html = `<p style="overflow: hidden">${titleName}<button type="button"
                                                         class="${titleName}"
                                                         id="select-btn-02"
                                                         onclick="toggleCookie(this)"
                                                         >X
                                                 </button></p>`;
-                $('#select-list').append(temp_html);
+                    $('#select-list').append(temp_html);
+                }
             }
         }
 
@@ -313,7 +323,7 @@
             for (let i = 0; i < cookeList.length; i++) {
                 let titleName = cookeList[i].split('=')[0];
 
-                if (target.replaceAll(" ", "") == titleName) {
+                if (target == titleName) {
                     return true;
                 }
             }
@@ -321,19 +331,55 @@
         }
 
         function toggleCookie(e) {
-            let selectionMedia = e.getAttribute('class');
+            let selectionMedia = e.getAttribute('class').replaceAll(" ", "").split('&');
             let exDate = new Date();
 
-            if (isCookie(selectionMedia)) {
-                let cookie_value = escape(selectionMedia) + '; expires=' + exDate.toUTCString();
-                document.cookie = selectionMedia.replaceAll(" ", "") + '=' + cookie_value;
+            if (isCookie(selectionMedia[0])) {
+                let cookie_value = escape(selectionMedia[1]) + '; expires=' + exDate.toUTCString();
+                document.cookie = selectionMedia[0] + '=' + cookie_value;
                 $('#select-list').empty();
                 showCookie();
                 return;
             }
             exDate.setDate(exDate.getDate() + 1);
-            let cookie_value = escape(selectionMedia) + '; expires=' + exDate.toUTCString();
-            document.cookie = selectionMedia.replaceAll(" ", "") + '=' + cookie_value;
+            let cookie_value = escape(selectionMedia[1]) + '; expires=' + exDate.toUTCString();
+            document.cookie = selectionMedia[0] + '=' + cookie_value;
+            $('#select-list').empty();
+            showCookie();
+        }
+
+
+        function recommendResult() {
+            let cookeList = document.cookie.split('; ');
+            let exDate = new Date();
+            console.log(cookeList)
+
+            let result = {'watcha' : 0, 'wavve' : 0}
+            for (let i = 0; i < cookeList.length; i++) {
+                let type = cookeList[i].split('=')[1];
+                let cookie_value = escape(cookeList[i].split('=')[0]) + '; expires=' + exDate.toUTCString();
+                document.cookie = cookeList[i].split('=')[0] + '=' + cookie_value;
+
+                if (type == 'watcha') {
+                    result['watcha']++;
+                    continue;
+                }
+                result['wavve']++;
+            }
+
+            if (result['watcha'] < result['wavve']) {
+                alert('wavve가 성향에 더 잘 맞습니다.')
+                $('#select-list').empty();
+                showCookie();
+                return;
+            }
+            if (result['watcha'] == result['wavve']) {
+                alert('watcha와 wavve 둘 다 성향과 일치합니다.')
+                $('#select-list').empty();
+                showCookie();
+                return;
+            }
+            alert('watcha 성향에 더 잘 맞습니다.')
             $('#select-list').empty();
             showCookie();
         }
@@ -355,7 +401,7 @@
         </div>
         <div id="select-list" class="basket_txt"></div>
         <p>
-            <button class="select-btn">결과보기</button>
+            <button class="select-btn" onclick="recommendResult()">결과보기</button>
         </p>
     </div>
     <div style="float: right">
@@ -375,7 +421,7 @@
                     <div class="author-content">
                         <hr style="background-color: white; border: 1px solid white;">
                         <h4 style="color: white">OTT서비스 추천 페이지</h4>
-                        <span style="color: black; font-size: 20px">n개만 골라보세요!</span>
+                        <span style="color: black; font-size: 20px">여러 개만 골라보세요!</span>
                         <hr style="background-color: white; border: 1px solid white;">
                     </div>
                     <nav class="main-nav" role="navigation">
@@ -414,7 +460,7 @@
                             <div class="right-text">
                                 <h2 style="font-weight: bold">토이프로젝트 - OTT서비스 추천</h2>
                                 <p style="line-height: 30px; font-size: 15px;">
-                                    무작위 컨텐츠 중 n개를 고르면 당신에게 알맞는 OTT서비스를 추천!!<br/>
+                                    무작위 컨텐츠 중 여러 개를 고르면 당신에게 알맞는 OTT서비스를 추천!!<br/>
                                     아래의 포스터가 무슨 컨텐츠인지 모르겠다면 '자세히 보기'를 Click!
                                 </p>
                             </div>
@@ -430,7 +476,7 @@
                     <h2>골라보세요!</h2>
                     <div class="line-dec"></div>
                     <span style="line-height: 30px"
-                    >n개를 골라보세요!<br/>
+                    >여러 개를 골라보세요!<br/>
                   무슨 컨텐츠인지 잘 모르겠다면 "자세히 보기"를 Click!
                 </span>
                 </div>
