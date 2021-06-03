@@ -98,7 +98,9 @@
             position: absolute;
             width: 200px;
             /*height: 470px;*/
-            height: auto;
+            overflow: hidden;
+            /*height: auto;*/
+            max-height: 570px!important;
             top: 50px;
             background-color: floralwhite;
             color: #ffffff;
@@ -115,27 +117,19 @@
             z-index: 5;
 
         }
-        .hr-1 {
-            margin: 7px 0px 7px 0px;
+        .basket_title {
+            border-bottom: solid 2px #454545;
+            margin: 0px;
+            padding: 10px 0px 0px 0px;
         }
         .basket_txt {
-            height: 200px;
-        }
-        .btn-select {
-            background-color: white;
-            border-radius: 50px;
-            float: left;
-            text-align: center;
-            font-size: 20px;
-            margin: 0px 0px 16px 23px;
-        }
-        .btn-cancel {
-            background-color: white;
-            border-radius: 50px;
-            float: right;
-            text-align: center;
-            font-size: 20px;
-            margin: 0px 23px 16px 0px;
+            overflow: auto;
+            height: auto;
+            min-height: 150px;
+            max-height: 456px;
+            border-bottom: solid 2px #454545;
+            margin: 0px;
+            padding: 10px 0px 0px 0px;
         }
         .radio_label:hover {
             color: #a43f49;
@@ -149,13 +143,32 @@
             margin: auto auto auto 30px;
             top: 150px;
         }
+        .select-btn {
+            outline: none;
+            background-color: #a43f49;
+            color: #fff;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        #select-btn-02 {
+            display: block;
+            float: right!important;
+            outline: none;
+            background-color: #a43f49;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 0px 3px 0px 4px!important;
+            margin-right: 10px;
+        }
     </style>
 
     <!-- JavaScript -->
     <script>
         $(document).ready(function () {
+            $('#select-list').html("")
             showAll()
-            showCookie()
+            // showCookie()
         })
 
         function dataReset() {
@@ -171,7 +184,6 @@
         }
 
         function showAll() {
-            $(".first").html("");
             $.ajax({
                 type: "GET",
                 url: "/api/data/all",
@@ -285,8 +297,12 @@
 
             for (let i = 0; i < cookeList.length; i++) {
                 let titleName = cookeList[i].split('=')[0];
-                let temp_html = `<p>${titleName}<button type="button" class="${titleName}" onclick="toggleCookie(this)">지우기</button></p>`;
-
+                let temp_html = `<p style="overflow: hidden">${titleName}<button type="button"
+                                                        class="${titleName}"
+                                                        id="select-btn-02"
+                                                        onclick="toggleCookie(this)"
+                                                        >X
+                                                </button></p>`;
                 $('#select-list').append(temp_html);
             }
         }
@@ -330,13 +346,17 @@
 
 <body>
     <div class="sideBanner">
-        <div>
+        <div class="basket_title">
+            <p>
             <span class="txt-label">
               당신이 선택한 컨텐츠⬇︎⬇︎⬇︎
             </span>
+            </p>
         </div>
-        <hr class="hr-1">
         <div id="select-list" class="basket_txt"></div>
+        <p>
+            <button class="select-btn">결과보기</button>
+        </p>
     </div>
     <div style="float: right">
         <button id="DataResetBtn" onclick="dataReset()">데이터 리셋</button>
