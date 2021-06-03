@@ -352,22 +352,23 @@
         function recommendResult() {
             let cookeList = document.cookie.split('; ');
             let exDate = new Date();
-            console.log(cookeList)
-
             let result = {'watcha' : 0, 'wavve' : 0}
-            for (let i = 0; i < cookeList.length; i++) {
-                let type = cookeList[i].split('=')[1];
-                let cookie_value = escape(cookeList[i].split('=')[0]) + '; expires=' + exDate.toUTCString();
-                document.cookie = cookeList[i].split('=')[0] + '=' + cookie_value;
 
-                if (type == 'watcha') {
-                    result['watcha']++;
-                    continue;
+            if (cookeList != '') {
+                for (let i = 0; i < cookeList.length; i++) {
+                    let type = cookeList[i].split('=')[1];
+                    let cookie_value = escape(cookeList[i].split('=')[0]) + '; expires=' + exDate.toUTCString();
+                    document.cookie = cookeList[i].split('=')[0] + '=' + cookie_value;
+
+                    if (type == 'watcha') {
+                        result['watcha']++;
+                        continue;
+                    }
+                    result['wavve']++;
                 }
-                result['wavve']++;
             }
 
-            if (result['watcha'] == 0 && result['wavve']) {
+            if (result['watcha'] == 0 && result['wavve'] == 0) {
                 alert('1개 이상 선택하셔야 추천이 가능합니다.')
                 return;
             }
